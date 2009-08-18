@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-22 18:20
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from criterion import OrComposition, AndComposition
-
-restore_path()
+from scikits.optimization.criterion import OrComposition, AndComposition
 
 class TrueCriterion(object):
   def __call__(self, state, **kwargs):

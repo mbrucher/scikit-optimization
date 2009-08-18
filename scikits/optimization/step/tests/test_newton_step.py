@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 14:03
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from step import NewtonStep
-
-restore_path()
+from scikits.optimization.step import NewtonStep
 
 class Function(object):
   def __call__(self, x):

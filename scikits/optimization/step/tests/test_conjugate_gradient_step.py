@@ -1,16 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-29 17:14
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from step import CWConjugateGradientStep, DYConjugateGradientStep, DConjugateGradientStep, FRConjugateGradientStep, PRPConjugateGradientStep, FRPRPConjugateGradientStep, HZConjugateGradientStep
-restore_path()
+from scikits.optimization.step import CWConjugateGradientStep, DYConjugateGradientStep, DConjugateGradientStep, FRConjugateGradientStep, PRPConjugateGradientStep, FRPRPConjugateGradientStep, HZConjugateGradientStep
 
 class Function(object):
   def __call__(self, x):

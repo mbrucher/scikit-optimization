@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 14:55
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from criterion import AICCriterion, ModifiedAICCriterion
-
-restore_path()
+from scikits.optimization.criterion import AICCriterion, ModifiedAICCriterion
 
 class test_AICCriterion(unittest.TestCase):
   def test_call(self):

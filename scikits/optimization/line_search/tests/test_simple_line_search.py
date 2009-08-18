@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-22 14:02
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from line_search import SimpleLineSearch
-
-restore_path()
+from scikits.optimization.line_search import SimpleLineSearch
 
 class test_SimpleLineSearch(unittest.TestCase):
   def test_create(self):

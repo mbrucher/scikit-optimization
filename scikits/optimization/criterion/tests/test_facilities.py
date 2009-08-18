@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 14:32
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from criterion import criterion
-
-restore_path()
+from scikits.optimization.criterion import criterion
 
 class Function(object):
   def __init__(self, value):

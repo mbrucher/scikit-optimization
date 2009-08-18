@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-31 14:01
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from step import GoldsteinPriceStep
-
-restore_path()
+from scikits.optimization.step import GoldsteinPriceStep
 
 class Function(object):
   def __call__(self, x):

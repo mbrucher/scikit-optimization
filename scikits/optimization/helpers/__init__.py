@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-12-11 09:16
-
 """
 Helper functions
 
@@ -16,7 +13,7 @@ Finite Difference functions :
 """
 
 from quadratic import *
-
+from levenberg_marquardt import *
 from finite_difference import *
 
 helpers__all__ = ['Quadratic', 'ForwardFiniteDifferences', 'CenteredFiniteDifferences']

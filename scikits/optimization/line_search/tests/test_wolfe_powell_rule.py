@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-22 14:02
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from line_search import WolfePowellRule
-
-restore_path()
+from scikits.optimization.line_search import WolfePowellRule
 
 class Function(object):
   def __call__(self, x):

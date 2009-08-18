@@ -1,17 +1,12 @@
 #!/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:59
-
 """
 Class defining the Rosenbrock function
 """
 
 import numpy
 from numpy.testing import *
-set_package_path()
-from optimizers import criterion, step, optimizer, line_search
-restore_path()
+from scikits.optimization import criterion, step, optimizer, line_search
 
 class Rosenbrock:
   """
@@ -54,7 +49,7 @@ class Rosenbrock:
     H += numpy.diag(diagonal)
     return H
 
-class test_Rosenbrock(NumpyTestCase):
+class test_Rosenbrock(object):
   """
   Global test class with the Rosenbrock function
   """

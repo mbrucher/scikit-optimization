@@ -1,14 +1,11 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 14:19
-
 """
 A list of standard convergence criteria based on the number of iterations, the last values taken by the cost function and the associated points
 """
 
 import math
 import numpy
-import defaults
+from scikits.optimization import defaults
 
 class IterationCriterion(object):
   """

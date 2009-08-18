@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-23 09:45
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from criterion import IterationCriterion, MonotonyCriterion, RelativeValueCriterion, AbsoluteValueCriterion, RelativeParametersCriterion, AbsoluteParametersCriterion
-
-restore_path()
+from scikits.optimization.criterion import IterationCriterion, MonotonyCriterion, RelativeValueCriterion, AbsoluteValueCriterion, RelativeParametersCriterion, AbsoluteParametersCriterion
 
 class test_IterationCriterion(unittest.TestCase):
   def test_call(self):

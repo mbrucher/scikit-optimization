@@ -1,17 +1,9 @@
 #/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 15:01
-
 import unittest
 import numpy
-
 from numpy.testing import *
-set_package_path()
-
-from step import PartialStep, GradientStep
-
-restore_path()
+from scikits.optimization.step import PartialStep, GradientStep
 
 class Function(object):
   def __call__(self, x):

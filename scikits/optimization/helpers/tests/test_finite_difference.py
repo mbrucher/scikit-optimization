@@ -1,24 +1,16 @@
 #!/usr/bin/env python
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:19
-
 import unittest
 import numpy
 import numpy.random
-
+from numpy.testing import *
 import os.path
 
-from numpy.testing import *
-set_package_path()
-
-from criterion import *
-from helpers import ForwardFiniteDifferences, CenteredFiniteDifferences
-from line_search import *
-from optimizer import *
-from step import *
-
-restore_path()
+from scikits.optimization.criterion import *
+from scikits.optimization.helpers import ForwardFiniteDifferences, CenteredFiniteDifferences
+from scikits.optimization.line_search import *
+from scikits.optimization.optimizer import *
+from scikits.optimization.step import *
 
 class Function(ForwardFiniteDifferences):
   def __call__(self, x):
