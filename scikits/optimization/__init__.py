@@ -1,18 +1,7 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 11:16
-
 """
 Optimization module
 """
-
-# Needed so that default paramaters are accessible from everywhere in the submodule
-def mod_path():
-  import sys
-  import os.path
-  sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-
-mod_path()
 
 import defaults
 import criterion
