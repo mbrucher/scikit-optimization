@@ -32,6 +32,7 @@ class PolytopeOptimizer(optimizer.Optimizer):
     sorted_indices = numpy.argsort(values)
     self.state['new_parameters'] = numpy.array(self.optimalPoint[sorted_indices])
     self.state['new_value'] = values[sorted_indices]
+    print self.state['new_parameters']
 
   def get_value(self, mean, discarded_point, t):
     """
@@ -47,11 +48,11 @@ class PolytopeOptimizer(optimizer.Optimizer):
     self.state['old_parameters'] = self.optimalPoint = self.state['new_parameters']
     self.state['old_value'] = self.state['new_value']
 
-    mean = numpy.mean(self.optimalPoint[:-1], axis=1)
+    mean = numpy.mean(self.optimalPoint[:-1], axis=0)
     discarded_point = self.optimalPoint[-1]
     
     point, value = self.get_value(mean, discarded_point, -1)
-    if value < self.state['old_value'][-1]:
+    if value < self.state['old_value'][-2]:
       if value > self.state['old_value'][0]:
         self.optimalPoint = numpy.vstack((self.optimalPoint[:-1], point))
       else:
@@ -61,7 +62,7 @@ class PolytopeOptimizer(optimizer.Optimizer):
         else:
           self.optimalPoint = numpy.vstack((self.optimalPoint[:-1], point))
     else:
-      if value > self.state['old_value'][-2]:
+      if value < self.state['old_value'][-1]:
         point_contraction, value_contraction = self.get_value(mean, discarded_point, -.5)
         if value_contraction < value:
           self.optimalPoint = numpy.vstack((self.optimalPoint[:-1], point_contraction))
@@ -69,7 +70,7 @@ class PolytopeOptimizer(optimizer.Optimizer):
           self.optimalPoint = (self.optimalPoint + self.optimalPoint[0])/2
       else:
         point_contraction, value_contraction = self.get_value(mean, discarded_point, .5)
-        if value_contraction < value:
+        if value_contraction < self.state['old_value'][-1]:
           self.optimalPoint = numpy.vstack((self.optimalPoint[:-1], point_contraction))
         else:
           self.optimalPoint = (self.optimalPoint + self.optimalPoint[0])/2
