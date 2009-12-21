@@ -32,7 +32,6 @@ class PolytopeOptimizer(optimizer.Optimizer):
     sorted_indices = numpy.argsort(values)
     self.state['new_parameters'] = numpy.array(self.optimalPoint[sorted_indices])
     self.state['new_value'] = values[sorted_indices]
-    print self.state['new_parameters']
 
   def get_value(self, mean, discarded_point, t):
     """
