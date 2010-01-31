@@ -9,9 +9,9 @@ import sys
 DISTNAME            = 'scikits.optimization'
 DESCRIPTION         = 'A python module for numerical optimization'
 LONG_DESCRIPTION    = descr
-MAINTAINER          = 'Matthieu Brucher',
-MAINTAINER_EMAIL    = 'matthieu.brucher@gmail.com',
-URL                 = 'http://projects.scipy.org/scipy/scikits',
+MAINTAINER          = 'Matthieu Brucher'
+MAINTAINER_EMAIL    = 'matthieu.brucher@gmail.com'
+URL                 = 'http://projects.scipy.org/scipy/scikits'
 LICENSE             = 'new BSD'
 
 optimization_version = 0.1
