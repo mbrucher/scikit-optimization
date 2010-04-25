@@ -61,7 +61,7 @@ class RelativeValueCriterion(object):
     """
     old_value = state['old_value']
     new_value = state['new_value']
-    value = (abs(new_value - old_value) / (new_value + old_value + 10e-127) < self.error)
+    value = (abs(new_value - old_value) / (abs(new_value) + abs(old_value) + 10e-127) < self.error)
     if value:
       state['istop'] = defaults.SMALL_DELTA_F_F
     return value
