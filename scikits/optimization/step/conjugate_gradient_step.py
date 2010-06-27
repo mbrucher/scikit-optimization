@@ -1,9 +1,15 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-29 15:05
-
 """
 Computes the conjugate gradient steps for a specific function at a specific point
+
+The different available gradient are:
+- FRConjugateGradientStep: Fletcher-Reeves
+- CWConjugateGradientStep: Crowder-Wolfe or Hestenes-Stiefel
+- DConjugateGradientStep: Dixon
+- DYConjugateGradientStep: Dai Yan
+- PRPConjugateGradientStep: Polak-Ribiere-Polyak
+- FRPRPConjugateGradientStep: Fletcher-Reeves modified Polak-Ribiere-Polyak
+- HZConjugateGradientStep: Hager-Zhang
 """
 
 import numpy
