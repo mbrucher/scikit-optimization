@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-12-18 09:47
-
 """
 An hyperbolic line search, in fact no searches at all
 """

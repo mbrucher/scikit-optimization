@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:05
-
 """
 Proposes a way to create a composite criterion
 """

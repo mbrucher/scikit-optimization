@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.criterion import AICCriterion, ModifiedAICCriterion
+from .. import AICCriterion, ModifiedAICCriterion
 
 class test_AICCriterion(unittest.TestCase):
   def test_call(self):

@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-10 23:13
-
 """
 A standard optimizer
 """

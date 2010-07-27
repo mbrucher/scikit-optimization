@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-23 10:12
-
 import quadratic
 import numpy
 

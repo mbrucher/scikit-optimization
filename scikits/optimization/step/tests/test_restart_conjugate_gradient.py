@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.step import FRConjugateGradientStep, RestartPeriodicallyConjugateGradientStep, RestartNotOrthogonalConjugateGradientStep
+from .. import FRConjugateGradientStep, RestartPeriodicallyConjugateGradientStep, RestartNotOrthogonalConjugateGradientStep
 
 class Function(object):
   def __call__(self, x):

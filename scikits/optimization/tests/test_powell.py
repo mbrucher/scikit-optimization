@@ -6,7 +6,7 @@ Class defining the Powell function
 
 import numpy
 from numpy.testing import *
-from scikits.optimization import criterion, step, optimizer, line_search
+from .. import criterion, step, optimizer, line_search
 
 class Powell:
   """

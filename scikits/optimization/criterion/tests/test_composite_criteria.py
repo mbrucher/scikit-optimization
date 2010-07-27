@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.criterion import OrComposition, AndComposition
+from .. import OrComposition, AndComposition
 
 class TrueCriterion(object):
   def __call__(self, state, **kwargs):

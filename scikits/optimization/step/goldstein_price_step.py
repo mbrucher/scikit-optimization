@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-31 14:01
-
 """
 Computes Goldstein-Price step for a specific function at a specific point
 """

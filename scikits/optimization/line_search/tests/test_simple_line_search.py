@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.line_search import SimpleLineSearch
+from .. import SimpleLineSearch
 
 class test_SimpleLineSearch(unittest.TestCase):
   def test_create(self):

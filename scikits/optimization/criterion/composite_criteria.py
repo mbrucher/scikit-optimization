@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:25
-
 """
 Composite criteria allow to use several criteria together, with and/or composition
 """

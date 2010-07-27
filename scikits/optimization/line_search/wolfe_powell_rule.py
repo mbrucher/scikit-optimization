@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-22 14:05
-
 import numpy
 
 class WolfePowellRule(object):

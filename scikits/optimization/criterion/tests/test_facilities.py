@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.criterion import criterion
+from .. import criterion
 
 class Function(object):
   def __init__(self, value):

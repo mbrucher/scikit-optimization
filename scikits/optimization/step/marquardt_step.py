@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-29 13:42
-
 """
 Computes a Marquardt step for a specific function at a specific point
 """

@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-31 13:42
-
 """
 Module containing every step use to lower a cost function
 

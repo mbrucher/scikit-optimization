@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-26 19:48
-
 """
 Line Search with the Fibonacci section method
 """

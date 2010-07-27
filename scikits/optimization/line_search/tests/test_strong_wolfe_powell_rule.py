@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.line_search import StrongWolfePowellRule
+from .. import StrongWolfePowellRule
 
 class Function(object):
   def __call__(self, x):

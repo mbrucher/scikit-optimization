@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-26 19:45
-
 """
 Line Search with the cubic interpolation method with the computation of the gradient of the function
 """

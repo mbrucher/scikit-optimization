@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-22 14:04
-
 import numpy
 
 class GoldsteinRule(object):

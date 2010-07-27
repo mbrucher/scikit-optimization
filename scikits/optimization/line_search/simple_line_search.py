@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 00:36
-
 """
 A simple line search, in fact no searches at all
 """

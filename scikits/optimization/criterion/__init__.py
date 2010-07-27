@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:04
-
 """
 Module containing every criteria for converge test
 

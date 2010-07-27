@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.step import PartialStep, GradientStep
+from .. import PartialStep, GradientStep
 
 class Function(object):
   def __call__(self, x):

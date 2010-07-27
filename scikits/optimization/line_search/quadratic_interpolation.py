@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-26 19:51
-
 """
 Line Search with the quadratic interpolation method with the computation of the gradient of the function
 """

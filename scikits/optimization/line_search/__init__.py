@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-12-12 09:29
-
 """
 Module containing the line searchers
 

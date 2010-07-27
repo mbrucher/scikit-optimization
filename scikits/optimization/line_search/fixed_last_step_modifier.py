@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-28 00:34
-
 """
 Line search decorator that overrides the default alpha_step value with a factor times the last alpha_step
 """

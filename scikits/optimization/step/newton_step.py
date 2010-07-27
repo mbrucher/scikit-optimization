@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-29 15:48
-
 """
 Computes a Newton step for a specific function at a specific point
 """

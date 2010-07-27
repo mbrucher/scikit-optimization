@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-24 15:03
-
 """
 Defines the defaults parameters for the generic optimizer framework
 """

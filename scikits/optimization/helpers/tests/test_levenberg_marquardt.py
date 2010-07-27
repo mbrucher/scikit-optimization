@@ -6,11 +6,11 @@ import numpy.random
 from numpy.testing import *
 import os.path
 
-from scikits.optimization.criterion import *
-from scikits.optimization.helpers import LMQuadratic
-from scikits.optimization.line_search import *
-from scikits.optimization.optimizer import *
-from scikits.optimization.step import *
+from ...criterion import *
+from ...helpers import LMQuadratic
+from ...line_search import *
+from ...optimizer import *
+from ...step import *
 
 class F1(object):
   def __call__(self, x, params):

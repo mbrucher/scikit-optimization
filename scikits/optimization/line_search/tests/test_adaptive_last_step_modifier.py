@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.line_search import SimpleLineSearch, AdaptiveLastStepModifier
+from .. import SimpleLineSearch, AdaptiveLastStepModifier
 
 class Function(object):
   def __call__(self, x):
