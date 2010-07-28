@@ -1,25 +1,10 @@
-
-# Matthieu Brucher
-# Last Change : 2007-08-24 10:25
+# -*- coding: utf-8 -*-
 
 """
 Composite criteria allow to use several criteria together, with and/or composition
 """
 
 import sys
-
-if sys.version < '2.5':
-  def all(iterable):
-    for element in iterable:
-        if not element:
-            return False
-    return True
-
-  def any(iterable):
-      for element in iterable:
-          if element:
-              return True
-      return False
 
 class OrComposition(object):
   """
