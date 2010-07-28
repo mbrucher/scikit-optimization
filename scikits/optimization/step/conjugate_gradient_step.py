@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 """
 Computes the conjugate gradient steps for a specific function at a specific point

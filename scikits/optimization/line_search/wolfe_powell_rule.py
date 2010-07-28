@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import numpy
 
@@ -59,9 +60,9 @@ class WolfePowellRule(object):
           alpha = alphap
           f1temp = ftemp
           f1ptemp = fptemp
-      else :
+      else:
         bracketSize = abs(bk - ak)
-        alphap = ak + (alpha - ak) / (2. * (1. + (f1temp - ftemp) / ((alpha - ak) * f1ptemp)))
+        alphap = ak + (alpha - ak) / (2. * (1. - (f1temp - ftemp) / ((alpha - ak) * f1ptemp)))
         bk = alpha
         if abs(alphap - ak) < self.alpha_limit * bracketSize:
           alpha = ak + self.alpha_limit * bracketSize

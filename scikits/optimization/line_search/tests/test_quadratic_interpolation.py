@@ -1,4 +1,4 @@
-#/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -20,6 +20,13 @@ class test_QuadraticInterpolationSearch(unittest.TestCase):
   def test_call(self):
     lineSearch = QuadraticInterpolationSearch(min_alpha_step = 0.0001)
     state = {'direction' : numpy.ones((2))}
+    function = Function()
+    assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
+    assert(state['alpha_step'] < 0.0001)
+
+  def test_call_with_init(self):
+    lineSearch = QuadraticInterpolationSearch(min_alpha_step = 0.0001)
+    state = {'direction' : numpy.ones((2)), 'initial_alpha_step' : 1}
     function = Function()
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)

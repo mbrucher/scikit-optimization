@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -24,7 +24,7 @@ class test_ForwardFiniteDifferences(unittest.TestCase):
                                          criterion = criterion(iterations_max = 100, ftol = 0.0000001, gtol=0.0001),
                                          x0 = startPoint,
                                          line_search = StrongWolfePowellRule())
-    assert_almost_equal(optimi.optimize(), numpy.array((2., -2)))
+    assert_almost_equal(optimi.optimize(), numpy.array((2., -2)), decimal=5)
 
   def test_hessian_optimization(self):
     startPoint = numpy.zeros(2, numpy.float)
@@ -47,7 +47,7 @@ class test_CenteredFiniteDifferences(unittest.TestCase):
                                          criterion = criterion(ftol = 0.0000001, gtol=0.0001),
                                          x0 = startPoint,
                                          line_search = StrongWolfePowellRule())
-    assert_almost_equal(optimi.optimize(), numpy.array((2., -2)))
+    assert_almost_equal(optimi.optimize(), numpy.array((2., -2)), decimal=5)
 
   def test_hessian_optimization(self):
     startPoint = numpy.zeros(2, numpy.float)

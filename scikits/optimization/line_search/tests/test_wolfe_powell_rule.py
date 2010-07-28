@@ -20,12 +20,21 @@ class test_WolfePowellRuleSearch(unittest.TestCase):
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)
 
+  def test_call_with_init(self):
+    lineSearch = WolfePowellRule()
+    state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.ones((2)), 'initial_alpha_step' : 1}
+    function = Function()
+    assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
+    assert(state['alpha_step'] < 0.0001)
+    assert(state['alpha_step'] > 0)
+
   def test_call_sigma(self):
     lineSearch = WolfePowellRule(sigma = 1)
     state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.ones((2))}
     function = Function()
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)
+    assert(state['alpha_step'] > 0)
 
   def test_call_nan(self):
     lineSearch = WolfePowellRule(alpha_min = numpy.nan)

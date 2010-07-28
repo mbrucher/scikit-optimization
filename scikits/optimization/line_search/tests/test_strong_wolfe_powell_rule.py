@@ -21,6 +21,15 @@ class test_StrongWolfePowellRuleSearch(unittest.TestCase):
     assert(2 * l[0] + l[1] == 0)
     assert(state['alpha_step'] > 0)
 
+  def test_call_gradient_direction_with_init(self):
+    lineSearch = StrongWolfePowellRule()
+    state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.array((4., -8.)), 'initial_alpha_step' : 1}
+    function = Function()
+    x = lineSearch(origin = numpy.zeros((2)), state = state, function = function)
+    assert(function(x) <= function(numpy.zeros((2))) + 0.1 * state['alpha_step'] * numpy.dot(numpy.array((12., 16.)), numpy.array((4., -8.))))
+    assert(numpy.dot(function.gradient(state['alpha_step'] * numpy.array((4., -8.))).T, numpy.array((4., -8.))) >0.4 * numpy.dot(state['gradient'], numpy.array((4., -8.))))
+    assert(state['alpha_step'] > 0)
+
   def test_call_nan(self):
     lineSearch = StrongWolfePowellRule(alpha_min = numpy.nan)
     state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.ones((2))}
