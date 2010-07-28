@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 """
 A list of standard convergence criteria based on the number of iterations, the last values taken by the cost function and the associated points
@@ -5,7 +6,7 @@ A list of standard convergence criteria based on the number of iterations, the l
 
 import math
 import numpy
-from scikits.optimization import defaults
+from .. import defaults
 
 class IterationCriterion(object):
   """
