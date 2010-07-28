@@ -1,4 +1,4 @@
-#/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -13,6 +13,21 @@ class Function(object):
     return numpy.array((3. * (x[0] - 2) ** 2, 4 * (2 * x[1] + 4)))
 
 class test_StrongWolfePowellRuleSearch(unittest.TestCase):
+  def test_call_sigma(self):
+    lineSearch = StrongWolfePowellRule(sigma = 1)
+    state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.array((4., -8.))}
+    function = Function()
+    l = lineSearch(origin = numpy.zeros((2)), state = state, function = function)
+    assert(2 * l[0] + l[1] == 0)
+    assert(state['alpha_step'] > 0)
+
+  def test_call_nan(self):
+    lineSearch = StrongWolfePowellRule(alpha_min = numpy.nan)
+    state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.ones((2))}
+    function = Function()
+    assert_array_equal(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.zeros((2)))
+    assert(state['alpha_step'] == 0)
+
   def test_call_gradient_direction(self):
     lineSearch = StrongWolfePowellRule()
     state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.array((4., -8.))}

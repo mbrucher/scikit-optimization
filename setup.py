@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 descr   = """
 """
@@ -14,7 +15,7 @@ MAINTAINER_EMAIL    = 'matthieu.brucher@gmail.com'
 URL                 = 'http://projects.scipy.org/scipy/scikits'
 LICENSE             = 'new BSD'
 
-optimization_version = 0.1
+optimization_version = 0.2
 
 #DOWNLOAD_URL        = 'http://scipy.org/scipy/scikits/attachment/wiki/OpenOptInstall/openopt' + str(openopt_version) + '.tar.bz2'
 
