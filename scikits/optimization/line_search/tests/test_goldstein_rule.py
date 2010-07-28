@@ -1,4 +1,4 @@
-#/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -21,6 +21,13 @@ class test_GoldsteinRuleSearch(unittest.TestCase):
     assert(function(x) <= function(numpy.zeros((2))) + 0.1 * state['alpha_step'] * numpy.dot(numpy.array((12., 16.)), numpy.array((4., -8.))))
     assert(function(x) >= function(numpy.zeros((2))) + 0.9 * state['alpha_step'] * numpy.dot(numpy.array((12., 16.)), numpy.array((4., -8.))))
     assert(state['alpha_step'] > 0)
+
+  def test_call_nan(self):
+    lineSearch = GoldsteinRule(alpha_min = numpy.nan)
+    state = {'gradient' : numpy.array((12., 16.)), 'direction' : numpy.array((4., -8.))}
+    function = Function()
+    x = lineSearch(origin = numpy.zeros((2)), state = state, function = function)
+    assert(state['alpha_step'] == 0)
 
 if __name__ == "__main__":
   unittest.main()
