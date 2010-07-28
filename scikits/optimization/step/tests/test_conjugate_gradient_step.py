@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.step import CWConjugateGradientStep, DYConjugateGradientStep, DConjugateGradientStep, FRConjugateGradientStep, PRPConjugateGradientStep, FRPRPConjugateGradientStep, HZConjugateGradientStep
+from .. import CWConjugateGradientStep, DYConjugateGradientStep, DConjugateGradientStep, FRConjugateGradientStep, PRPConjugateGradientStep, FRPRPConjugateGradientStep, HZConjugateGradientStep
 
 class Function(object):
   def __call__(self, x):

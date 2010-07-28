@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-10 23:15
-
 """
 Computes a partial step for a specific function at a specific point, acting like a decorator for other steps
 """

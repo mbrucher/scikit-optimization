@@ -6,7 +6,7 @@ Class defining the Rosenbrock function
 
 import numpy
 from numpy.testing import *
-from scikits.optimization import criterion, step, optimizer, line_search
+from .. import criterion, step, optimizer, line_search
 
 class Rosenbrock:
   """

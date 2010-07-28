@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-30 09:23
-
 """
 Computes a quasi-Newton step for a specific function at a specific point
 """

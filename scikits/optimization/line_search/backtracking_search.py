@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-26 19:43
-
 import numpy
 
 class BacktrackingSearch(object):

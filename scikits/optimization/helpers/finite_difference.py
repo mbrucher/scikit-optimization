@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-12-11 09:14
-
 import numpy
 
 class ForwardFiniteDifferences(object):

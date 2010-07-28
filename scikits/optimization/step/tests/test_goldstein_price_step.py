@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.step import GoldsteinPriceStep
+from .. import GoldsteinPriceStep
 
 class Function(object):
   def __call__(self, x):

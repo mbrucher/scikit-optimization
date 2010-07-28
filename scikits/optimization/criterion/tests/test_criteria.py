@@ -3,7 +3,7 @@
 import unittest
 import numpy
 from numpy.testing import *
-from scikits.optimization.criterion import IterationCriterion, MonotonyCriterion, RelativeValueCriterion, AbsoluteValueCriterion, RelativeParametersCriterion, AbsoluteParametersCriterion
+from .. import IterationCriterion, MonotonyCriterion, RelativeValueCriterion, AbsoluteValueCriterion, RelativeParametersCriterion, AbsoluteParametersCriterion
 
 class test_IterationCriterion(unittest.TestCase):
   def test_call(self):

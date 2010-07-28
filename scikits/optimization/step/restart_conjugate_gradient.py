@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-29 11:48
-
 """
 Restarts a conjugate gradient search by deleting the step key in the state dictionary
 """

@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-07-20 15:04
-
 import numpy.linalg
 
 class Quadratic(object):

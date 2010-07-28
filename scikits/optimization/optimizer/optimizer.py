@@ -1,7 +1,4 @@
 
-# Matthieu Brucher
-# Last Change : 2007-08-23 21:53
-
 """
 The core optimizer from which every other optimizer is derived
 """
