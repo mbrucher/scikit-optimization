@@ -1,4 +1,4 @@
-#/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -19,15 +19,22 @@ class test_CubicInterpolationSearch(unittest.TestCase):
 
   def test_call(self):
     lineSearch = CubicInterpolationSearch(min_alpha_step = 0.0001)
-    state = {'direction' : numpy.ones((2))}
     function = Function()
+    state = {'direction' : numpy.ones((2)), 'new_value' : function(numpy.zeros((2)))}
+    assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
+    assert(state['alpha_step'] < 0.0001)
+
+  def test_call_with_init(self):
+    lineSearch = CubicInterpolationSearch(min_alpha_step = 0.0001)
+    function = Function()
+    state = {'direction' : numpy.ones((2)), 'initial_alpha_step' : 1, 'new_value' : function(numpy.zeros((2)))}
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)
 
   def test_call_gradient_direction(self):
     lineSearch = CubicInterpolationSearch(min_alpha_step = 0.0001)
-    state = {'direction' : numpy.array((4., -8.))}
     function = Function()
+    state = {'direction' : numpy.array((4., -8.)), 'new_value' : function(numpy.zeros((2)))}
     assert_almost_equal(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.array((1.0588, -2.1176)), decimal = 4)
     assert_almost_equal(state['alpha_step'], 1.0588/4, decimal = 4)
 

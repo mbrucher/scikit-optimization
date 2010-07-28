@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 """
 Line Search with the cubic interpolation method with the computation of the gradient of the function
@@ -50,7 +51,7 @@ class CubicInterpolationSearch(object):
         else:
           return fv, df(x)
 
-    f0 = None#TODO: extract f0 from state
+    f0 = state['new_value']
     f0, df0 = f_and_df(x0, f0)
 
     #TODO: rename something, step is inconvenient
