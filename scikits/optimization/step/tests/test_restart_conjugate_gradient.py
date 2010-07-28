@@ -1,4 +1,4 @@
-#/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import unittest
 import numpy
@@ -23,7 +23,7 @@ class test_RestartPeriodicallyConjugateGradientStep(unittest.TestCase):
   def test_call_restart(self):
     step = FRConjugateGradientStep()
     step_decorated = RestartPeriodicallyConjugateGradientStep(step, 10)
-    state = {'iteration' : 10, 'step' : None}
+    state = {'iteration' : 10, 'direction' : None}
     function = Function()
     assert_equal(step_decorated(function = function, point = numpy.zeros((2)), state = state), numpy.array((4., -16.)))
 
