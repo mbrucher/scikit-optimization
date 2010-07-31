@@ -16,9 +16,9 @@ def gradient(x):
 class TestOptimizer(unittest.TestCase):
   def test_function_object(self):
     optimizer = Optimizer(criterion = None, fun = fun, gradient = gradient)
-    print optimizer.function((0, 0))
+    optimizer.function((0, 0))
 
   @raises(RuntimeError)
-  def test_function_object(self):
+  def test_optimize(self):
     optimizer = Optimizer(criterion = None, fun = fun, gradient = gradient)
     optimizer.optimize()
