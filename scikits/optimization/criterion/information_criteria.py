@@ -12,7 +12,7 @@ class AICCriterion(object):
     - correct_factor is the modifiying factor for the weight of the parameters size
     """
     self.error = ftol
-    self.iterationMax = iterations_max
+    self.iterations_max = iterations_max
     self.correct_factor = correct_factor
 
   def __call__(self, state, **kwargs):
@@ -24,7 +24,7 @@ class AICCriterion(object):
     new_value = state['new_value']
     old_parameters = state['old_parameters']
     new_parameters = state['new_parameters']
-    return ((iteration > self.iterationMax) or ((self.correct_factor * len(new_parameters) + new_value) > (self.correct_factor * len(old_parameters) + old_value) * (1. + self.error)))
+    return ((iteration > self.iterations_max) or ((self.correct_factor * len(new_parameters) + new_value) > (self.correct_factor * len(old_parameters) + old_value) * (1. + self.error)))
 
 class ModifiedAICCriterion(object):
   """
@@ -38,7 +38,7 @@ class ModifiedAICCriterion(object):
     - correct_factor is the modifiying factor for the weight of the parameters size
     """
     self.error = ftol
-    self.iterationMax = iterations_max
+    self.iterations_max = iterations_max
     self.trials = trials
     self.correct_factor = correct_factor
 
@@ -56,4 +56,4 @@ class ModifiedAICCriterion(object):
     criteria = ((self.correct_factor * len(new_parameters) + new_value) > (self.correct_factor * len(old_parameters) + old_value) * (1. + self.error))
     if criteria:
       state['trial'] += 1
-    return ((iteration > self.iterationMax) or (criteria and (state['trial'] >= self.trials)))
+    return ((iteration > self.iterations_max) or (criteria and (state['trial'] >= self.trials)))

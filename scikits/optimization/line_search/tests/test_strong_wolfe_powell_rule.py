@@ -5,12 +5,7 @@ import numpy
 from numpy.testing import *
 from .. import StrongWolfePowellRule
 
-class Function(object):
-  def __call__(self, x):
-    return (x[0] - 2.) ** 3 + (2 * x[1] + 4) ** 2
-
-  def gradient(self, x):
-    return numpy.array((3. * (x[0] - 2) ** 2, 4 * (2 * x[1] + 4)))
+from .function import Function
 
 class test_StrongWolfePowellRuleSearch(unittest.TestCase):
   def test_call_sigma(self):

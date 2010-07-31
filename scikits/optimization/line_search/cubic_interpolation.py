@@ -19,8 +19,8 @@ class CubicInterpolationSearch(object):
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
       - the tolerance on the gradient (grad_tolerance = 1e-6)
     """
-    self.minStepSize = min_alpha_step
-    self.stepSize = alpha_step
+    self.min_step_size = min_alpha_step
+    self.step_size = alpha_step
     self.gradtol =  grad_tolerance
 
   def __call__(self, origin, function, state, **kwargs):
@@ -36,7 +36,7 @@ class CubicInterpolationSearch(object):
     if 'initial_alpha_step' in state:
       h0 = state['initial_alpha_step']
     else:
-      h0 = self.stepSize
+      h0 = self.step_size
 
     istop = -1
 
@@ -55,7 +55,7 @@ class CubicInterpolationSearch(object):
     f0, df0 = f_and_df(x0, f0)
 
     #TODO: rename something, step is inconvenient
-    xtol = self.minStepSize
+    xtol = self.min_step_size
 
     #if norm(df0) < gradtol: return origin + x0 * direction
     h = h0

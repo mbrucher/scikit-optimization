@@ -8,7 +8,7 @@ from .. import SimpleLineSearch
 class test_SimpleLineSearch(unittest.TestCase):
   def test_create(self):
     lineSearch = SimpleLineSearch()
-    assert_equal(lineSearch.stepSize, 1.)
+    assert_equal(lineSearch.step_size, 1.)
 
   def test_call(self):
     lineSearch = SimpleLineSearch(alpha_step = 0.1)

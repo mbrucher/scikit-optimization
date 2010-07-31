@@ -7,8 +7,8 @@ class Optimizer(object):
   """
   The simple optimizer class
   This class lacks some intel that must be populated/implemented in the subclasses :
-    - currentValues is a list of the 2 last cost values computed with the function
-    - currentParameters is a list of the 2 last parameters used for the computation of currentValues
+    - current_values is a list of the 2 last cost values computed with the function
+    - current_parameters is a list of the 2 last parameters used for the computation of currentValues
     - the iterate function that does the real iteration loop
   """
   def __init__(self, **kwargs):
@@ -39,7 +39,7 @@ class Optimizer(object):
 
     self.state['function'] = self.function
     self.criterion = kwargs['criterion']
-    self.recordHistory = kwargs.get('record', self.recordHistory)
+    self.record_history = kwargs.get('record', self.record_history)
     self.check_arguments()
 
   def optimize(self):
@@ -55,9 +55,9 @@ class Optimizer(object):
 
       self.optimized = True
 
-    return self.optimalPoint
+    return self.optimal_point
 
-  def recordHistory(self, **kwargs):
+  def record_history(self, **kwargs):
     """
     Function that does nothing, called for saving parameters in the iteration loop, if needed
     """

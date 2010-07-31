@@ -11,18 +11,18 @@ class ForwardFiniteDifferences(object):
     - difference is the amount of difference that will be used in the computations
     """
     self.difference = difference
-    self.invDifference = 1. / difference
+    self.inv_difference = 1. / difference
 
   def gradient(self, params):
     """
     Computes the gradient of the function
     """
     grad = numpy.empty(params.shape)
-    curValue = self(params)
+    current_value = self(params)
     for i in range(0, len(params)):
       paramsb = params.copy()
       paramsb[i] += self.difference
-      grad[i] = self.invDifference * (self(paramsb) - curValue)
+      grad[i] = self.inv_difference * (self(paramsb) - current_value)
     return grad
 
   def hessian(self, params):
@@ -30,11 +30,11 @@ class ForwardFiniteDifferences(object):
     Computes the hessian of the function
     """
     hess = numpy.empty((len(params), len(params)))
-    curGrad = self.gradient(params)
+    current_gradient = self.gradient(params)
     for i in range(0, len(params)):
       paramsb = params.copy()
       paramsb[i] -= self.difference
-      hess[i] = -self.invDifference * (self.gradient(paramsb) - curGrad)
+      hess[i] = -self.inv_difference * (self.gradient(paramsb) - current_gradient)
     return hess
 
   def hessianvect(self, params):
@@ -53,7 +53,7 @@ class CenteredFiniteDifferences(object):
     - difference is the amount of difference that will be used in the computations
     """
     self.difference = difference
-    self.invDifference = 1. / (2 * difference)
+    self.inv_difference = 1. / (2 * difference)
 
   def gradient(self, params):
     """
@@ -65,7 +65,7 @@ class CenteredFiniteDifferences(object):
       paramsb = params.copy()
       paramsa[i] -= self.difference
       paramsb[i] += self.difference
-      grad[i] = self.invDifference * (self(paramsb) - self(paramsa))
+      grad[i] = self.inv_difference * (self(paramsb) - self(paramsa))
     return grad
 
   def hessian(self, params):
@@ -78,7 +78,7 @@ class CenteredFiniteDifferences(object):
       paramsb = params.copy()
       paramsa[i] -= self.difference
       paramsb[i] += self.difference
-      hess[i] = self.invDifference * (self.gradient(paramsb) - self.gradient(paramsa))
+      hess[i] = self.inv_difference * (self.gradient(paramsb) - self.gradient(paramsa))
     return hess
 
   def hessianvect(self, params):

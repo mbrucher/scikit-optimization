@@ -5,17 +5,12 @@ import numpy
 from numpy.testing import *
 from .. import GoldenSectionSearch
 
-class Function(object):
-  def __call__(self, x):
-    return (x[0] - 2) ** 2 + (2 * x[1] + 4) ** 2
-
-  def gradient(self, x):
-    return numpy.array((2 * (x[0] - 2), 2 * (2 * x[1] + 4)))
+from .function import Function
 
 class test_GoldenSectionSearch(unittest.TestCase):
   def test_create(self):
     lineSearch = GoldenSectionSearch(min_alpha_step = 0.0001)
-    assert_equal(lineSearch.stepSize, 1.)
+    assert_equal(lineSearch.step_size, 1.)
 
   def test_call(self):
     lineSearch = GoldenSectionSearch(min_alpha_step = 0.0001)

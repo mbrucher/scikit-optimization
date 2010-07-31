@@ -14,7 +14,7 @@ class HyperbolicLineSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.stepSize = alpha_step
+    self.step_size = alpha_step
 
   def __call__(self, origin, state, **kwargs):
     """
@@ -28,7 +28,7 @@ class HyperbolicLineSearch(object):
       alpha = state['initial_alpha_step'] /( 1 + state['iteration'])
       state['alpha_step'] = alpha
     else:
-      alpha = self.stepSize /( 1 + state['iteration'])
+      alpha = self.step_size /( 1 + state['iteration'])
       state['alpha_step'] = alpha
     return origin + alpha * direction
 

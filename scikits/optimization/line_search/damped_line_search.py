@@ -17,9 +17,9 @@ class DampedLineSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.minStepSize = min_alpha_step
-    self.dampedError = damped_error
-    self.stepSize = alpha_step
+    self.min_step_size = min_alpha_step
+    self.damped_error = damped_error
+    self.step_size = alpha_step
 
   def __call__(self, origin, function, state, **kwargs):
     """
@@ -31,21 +31,21 @@ class DampedLineSearch(object):
     """
     direction = state['direction']
     if 'initial_alpha_step' in state:
-      stepSize = state['initial_alpha_step']
+      step_size = state['initial_alpha_step']
     else:
-      stepSize = self.stepSize
+      step_size = self.step_size
     currentValue = function(origin)
-    optimalPoint = origin + stepSize * direction
+    optimalPoint = origin + step_size * direction
     newValue = function(optimalPoint)
 
-    while(newValue > currentValue * (1. + self.dampedError)):
-      stepSize /= 2.
-      if stepSize < self.minStepSize:
+    while(newValue > currentValue * (1. + self.damped_error)):
+      step_size /= 2.
+      if step_size < self.min_step_size:
         break
-      optimalPoint = origin + stepSize * direction
+      optimalPoint = origin + step_size * direction
       newValue = function(optimalPoint)
     else:
-      state['alpha_step'] = stepSize
+      state['alpha_step'] = step_size
       return optimalPoint
     state['alpha_step'] = 0.
     return origin

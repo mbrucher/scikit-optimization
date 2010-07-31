@@ -8,7 +8,7 @@ import optimizer
 class StandardOptimizerModifying(optimizer.Optimizer):
   """
   A standard optimizer, takes a step and finds the best candidate
-  Must give in self.optimalPoint the optimal point after optimization
+  Must give in self.optimal_point the optimal point after optimization
   After each iteration the resulting optimization point is modified by a call to a function
   """
   def __init__(self, **kwargs):
@@ -26,13 +26,13 @@ class StandardOptimizerModifying(optimizer.Optimizer):
     """
     optimizer.Optimizer.__init__(self, **kwargs)
     self.stepKind = kwargs['step']
-    self.optimalPoint = kwargs['x0']
-    self.lineSearch = kwargs['line_search']
+    self.optimal_point = kwargs['x0']
+    self.line_search = kwargs['line_search']
     self.pre_modifier = kwargs.get('pre_modifier')
     self.post_modifier = kwargs.get('post_modifier')
 
-    self.state['new_parameters'] = self.optimalPoint
-    self.state['new_value'] = self.function(self.optimalPoint)
+    self.state['new_parameters'] = self.optimal_point
+    self.state['new_value'] = self.function(self.optimal_point)
 
     self.recordHistory(**self.state)
 
@@ -40,25 +40,25 @@ class StandardOptimizerModifying(optimizer.Optimizer):
     """
     Implementation of the optimization. Does one iteration
     """
-    self.state['unmodified_old_parameters'] = self.optimalPoint
+    self.state['unmodified_old_parameters'] = self.optimal_point
     self.state['unmodified_old_value'] = self.state['new_value']
 
     if self.pre_modifier:
-      self.optimalPoint = self.pre_modifier(self.optimalPoint)
-    self.state['old_parameters'] = self.optimalPoint
-    self.state['old_value'] = self.function(self.optimalPoint)
+      self.optimal_point = self.pre_modifier(self.optimal_point)
+    self.state['old_parameters'] = self.optimal_point
+    self.state['old_value'] = self.function(self.optimal_point)
 
-    direction = self.stepKind(self.function, self.optimalPoint, state = self.state)
+    direction = self.step(self.function, self.optimal_point, state = self.state)
 
-    self.optimalPoint = self.lineSearch(origin = self.optimalPoint, function = self.function, state = self.state)
+    self.optimal_point = self.line_search(origin = self.optimal_point, function = self.function, state = self.state)
 
-    self.state['unmodified_new_parameters'] = self.optimalPoint
-    self.state['unmodified_new_value'] = self.function(self.optimalPoint)
+    self.state['unmodified_new_parameters'] = self.optimal_point
+    self.state['unmodified_new_value'] = self.function(self.optimal_point)
 
     if self.post_modifier:
-      self.optimalPoint = self.post_modifier(self.optimalPoint)
-    self.state['new_parameters'] = self.optimalPoint
-    self.state['new_value'] = self.function(self.optimalPoint)
+      self.optimal_point = self.post_modifier(self.optimal_point)
+    self.state['new_parameters'] = self.optimal_point
+    self.state['new_value'] = self.function(self.optimal_point)
 
     self.recordHistory(**self.state)
 

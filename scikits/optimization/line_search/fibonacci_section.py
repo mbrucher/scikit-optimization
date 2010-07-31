@@ -16,10 +16,10 @@ class FibonacciSectionSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.minStepSize = min_alpha_step
-    self.stepSize = alpha_step
+    self.min_step_size = min_alpha_step
+    self.step_size = alpha_step
 
-    limit = self.stepSize / self.minStepSize
+    limit = self.step_size / self.min_step_size
     self.fibonacci = self.computeFibonacci(limit)
 
   def __call__(self, origin, function, state, **kwargs):
@@ -36,7 +36,7 @@ class FibonacciSectionSearch(object):
     if 'initial_alpha_step' in state:
       bk = state['initial_alpha_step']
     else:
-      bk = self.stepSize
+      bk = self.step_size
     v_bk = function(origin + bk * direction)
 
     k = 1

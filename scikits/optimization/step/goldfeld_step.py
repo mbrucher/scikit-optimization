@@ -7,7 +7,6 @@ from numpy.linalg import solve as n_solve
 from numpy.linalg import norm, cholesky, eigvalsh
 
 class GoldfeldStep(object):
-    
   """
   The Goldfeld step
   """
@@ -21,10 +20,8 @@ class GoldfeldStep(object):
     state['hessian'] = G
     c = 1e-8 # is this one best?
     
-    
-    
     d0 = None
-    
+
     try:
         L = cholesky(G)
         # reach here => isPositiveDefinite = True
@@ -40,7 +37,6 @@ class GoldfeldStep(object):
             for i in xrange(point):  G[i,i] += shift
                 
         step = n_solve(G, -g)
- 
-    
+
     state['direction'] = step
     return step

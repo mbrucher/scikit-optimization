@@ -14,7 +14,7 @@ class SimpleLineSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.stepSize = alpha_step
+    self.step_size = alpha_step
 
   def __call__(self, origin, state, **kwargs):
     """
@@ -27,6 +27,6 @@ class SimpleLineSearch(object):
     if 'initial_alpha_step' in state:
       state['alpha_step'] = state['initial_alpha_step']
     else:
-      state['alpha_step'] = self.stepSize
+      state['alpha_step'] = self.step_size
     return origin + state['alpha_step'] * direction
 

@@ -16,8 +16,8 @@ class GoldenSectionSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.minStepSize = min_alpha_step
-    self.stepSize = alpha_step
+    self.min_step_size = min_alpha_step
+    self.step_size = alpha_step
     self.goldenNumber = (math.sqrt(5) - 1) / 2.
 
   def __call__(self, origin, function, state, **kwargs):
@@ -34,7 +34,7 @@ class GoldenSectionSearch(object):
     if 'initial_alpha_step' in state:
       bk = state['initial_alpha_step']
     else:
-      bk = self.stepSize
+      bk = self.step_size
     v_bk = function(origin + bk * direction)
 
     uk = ak + self.goldenNumber * (bk - ak)
@@ -44,7 +44,7 @@ class GoldenSectionSearch(object):
 
     while True:
       if v_uk < v_lk:
-        if (bk - lk) < self.minStepSize:
+        if (bk - lk) < self.min_step_size:
           state['alpha_step'] = uk
           return origin + uk * direction
         ak = lk
@@ -54,7 +54,7 @@ class GoldenSectionSearch(object):
         uk = ak + self.goldenNumber * (bk - ak)
         v_uk = function(origin + uk * direction)
       else:
-        if (uk - ak) < self.minStepSize:
+        if (uk - ak) < self.min_step_size:
           state['alpha_step'] = lk
           return origin + lk * direction
         bk = uk

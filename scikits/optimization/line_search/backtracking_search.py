@@ -13,8 +13,8 @@ class BacktrackingSearch(object):
       - an alpha factor < 1 that will decrease the step size until the rule is valid (alpha_factor = 0.5)
     """
     self.rho = rho
-    self.stepSize = alpha_step
-    self.stepFactor = alpha_factor
+    self.step_size = alpha_step
+    self.step_factor = alpha_factor
 
   def __call__(self, origin, function, state, **kwargs):
     """
@@ -24,7 +24,7 @@ class BacktrackingSearch(object):
     if 'initial_alpha_step' in state:
       alpha = state['initial_alpha_step']
     else:
-      alpha = self.stepSize
+      alpha = self.step_size
 
     f1temp = function(origin)
     gradient = state['gradient']
@@ -34,4 +34,4 @@ class BacktrackingSearch(object):
       if ftemp <= f1temp + self.rho * alpha * numpy.dot(gradient, direction):
         state['alpha_step'] = alpha
         return origin + alpha * direction
-      alpha = alpha * self.stepFactor
+      alpha = alpha * self.step_factor

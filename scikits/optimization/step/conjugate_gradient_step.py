@@ -24,26 +24,26 @@ class ConjugateGradientStep(object):
     Initialization of the gradient step
       - coeff_function is the function that will compute the appropriate coefficient
     """
-    self.oldStep = None
-    self.oldGradient = None
+    self.old_step = None
+    self.old_gradient = None
     self.coeff_function = coeff_function
 
   def __call__(self, function, point, state):
     """
     Computes a gradient step based on a function and a point
     """
-    newGradient = function.gradient(point)
+    new_gradient = function.gradient(point)
 
     if 'direction' in state:
-      oldGradient = state['gradient']
-      oldStep = state['direction']
-      coeff = self.coeff_function(newGradient, oldGradient, oldStep)
-      step = - newGradient + coeff * oldStep
+      old_gradient = state['gradient']
+      old_step = state['direction']
+      coeff = self.coeff_function(new_gradient, old_gradient, old_step)
+      step = - new_gradient + coeff * old_step
     else:
       coeff = 0
-      step = - newGradient
-    self.oldGradient = newGradient
-    state['gradient'] = newGradient
+      step = - new_gradient
+    self.old_gradient = new_gradient
+    state['gradient'] = new_gradient
     state['conjugate_coefficient'] = coeff
     state['direction'] = step
     return step
@@ -52,16 +52,16 @@ def CWConjugateGradientStep():
   """
   The Crowder-Wolfe or Hestenes-Stiefel conjugate gradient step
   """
-  def function(newGradient, oldGradient, oldStep):
-    return numpy.dot(newGradient.T, (newGradient - oldGradient)) / numpy.dot(oldStep.T, (newGradient - oldGradient))
+  def function(new_gradient, old_gradient, old_step):
+    return numpy.dot(new_gradient.T, (new_gradient - old_gradient)) / numpy.dot(old_step.T, (new_gradient - old_gradient))
   return ConjugateGradientStep(function)
 
 def DConjugateGradientStep():
   """
   The Dixon conjugate gradient step
   """
-  def function(newGradient, oldGradient, oldStep):
-    return - numpy.dot(newGradient.T, newGradient) / numpy.dot(oldStep.T, oldGradient)
+  def function(new_gradient, old_gradient, old_step):
+    return - numpy.dot(new_gradient.T, new_gradient) / numpy.dot(old_step.T, old_gradient)
   return ConjugateGradientStep(function)
 
 def DYConjugateGradientStep():
@@ -69,8 +69,8 @@ def DYConjugateGradientStep():
   The Dai Yan conjugate gradient step
   Has good convergence capabilities (same as the FR-PRP gradient)
   """
-  def function(newGradient, oldGradient, oldStep):
-    return numpy.dot(newGradient.T, newGradient) / numpy.dot(oldStep.T, (newGradient - oldGradient))
+  def function(new_gradient, old_gradient, old_step):
+    return numpy.dot(new_gradient.T, new_gradient) / numpy.dot(old_step.T, (new_gradient - old_gradient))
   return ConjugateGradientStep(function)
 
 def FRConjugateGradientStep():
@@ -78,8 +78,8 @@ def FRConjugateGradientStep():
   The Fletcher Reeves conjugate gradient step
   Needs an exact line search for convergence or the strong Wolfe-Powell rules for an inexact line search
   """
-  def function(newGradient, oldGradient, oldStep):
-    return numpy.dot(newGradient.T, newGradient) / numpy.dot(oldGradient.T, oldGradient)
+  def function(new_gradient, old_gradient, old_step):
+    return numpy.dot(new_gradient.T, new_gradient) / numpy.dot(old_gradient.T, old_gradient)
   return ConjugateGradientStep(function)
 
 def PRPConjugateGradientStep():
@@ -87,8 +87,8 @@ def PRPConjugateGradientStep():
   The Polak-Ribiere-Polyak conjugate gradient step
   Can restart automatically, but needs an exact line search with a uniformely convex function to globally converge
   """
-  def function(newGradient, oldGradient, oldStep):
-    return numpy.dot(newGradient.T, (newGradient - oldGradient)) / numpy.dot(oldGradient.T, oldGradient)
+  def function(new_gradient, old_gradient, old_step):
+    return numpy.dot(new_gradient.T, (new_gradient - old_gradient)) / numpy.dot(old_gradient.T, old_gradient)
   return ConjugateGradientStep(function)
 
 def FRPRPConjugateGradientStep():
@@ -96,9 +96,9 @@ def FRPRPConjugateGradientStep():
   The Fletcher-Reeves modified Polak-Ribiere-Polyak conjugate gradient step
   Can restart automatically and has the advantages of the PRP gradient and of the FR gradient
   """
-  def function(newGradient, oldGradient, oldStep):
-    beta = numpy.dot(newGradient.T, (newGradient - oldGradient)) / numpy.dot(oldGradient.T, oldGradient)
-    betafr = numpy.dot(newGradient.T, newGradient) / numpy.dot(oldGradient.T, oldGradient)
+  def function(new_gradient, old_gradient, old_step):
+    beta = numpy.dot(new_gradient.T, (new_gradient - old_gradient)) / numpy.dot(old_gradient.T, old_gradient)
+    betafr = numpy.dot(new_gradient.T, new_gradient) / numpy.dot(old_gradient.T, old_gradient)
     if beta < -betafr:
       beta = -betafr
     elif beta > betafr:
@@ -111,8 +111,8 @@ def HZConjugateGradientStep():
   The Hager-Zhang conjugate gradient step
   Has good convergence capabilities (same as the FR-PRP gradient)
   """
-  def function(newGradient, oldGradient, oldStep):
-    yk = newGradient - oldGradient
-    beta = numpy.dot((yk - 2*numpy.linalg.norm(yk)/numpy.dot(yk.T, oldStep) * oldStep).T, newGradient) / numpy.dot(yk.T, oldStep)
+  def function(new_gradient, old_gradient, old_step):
+    yk = new_gradient - old_gradient
+    beta = numpy.dot((yk - 2*numpy.linalg.norm(yk)/numpy.dot(yk.T, old_step) * old_step).T, new_gradient) / numpy.dot(yk.T, old_step)
     return beta
   return ConjugateGradientStep(function)

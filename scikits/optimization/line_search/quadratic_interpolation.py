@@ -17,8 +17,8 @@ class QuadraticInterpolationSearch(object):
     Can have :
       - a step modifier, a factor to modulate the step (alpha_step = 1.)
     """
-    self.minStepSize = min_alpha_step
-    self.stepSize = alpha_step
+    self.min_step_size = min_alpha_step
+    self.step_size = alpha_step
 
   def __call__(self, origin, function, state, **kwargs):
     """
@@ -33,10 +33,10 @@ class QuadraticInterpolationSearch(object):
     if 'initial_alpha_step' in state:
       bk = state['initial_alpha_step']
     else:
-      bk = self.stepSize
+      bk = self.step_size
     v_bk = function(origin + bk * direction)
 
-    while abs(bk - ak) > self.minStepSize:
+    while abs(bk - ak) > self.min_step_size:
       v_ak = function(origin + ak * direction)
       g_ak = numpy.dot(function.gradient(origin + ak * direction), direction)
       ck = ak - .5 * (ak - bk) * g_ak / (g_ak - (v_ak - v_bk) / (ak - bk))

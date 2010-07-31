@@ -5,12 +5,7 @@ import numpy
 from numpy.testing import *
 from .. import WolfePowellRule
 
-class Function(object):
-  def __call__(self, x):
-    return (x[0] - 2) ** 3 + (2 * x[1] + 4) ** 2
-
-  def gradient(self, x):
-    return numpy.array((3 * (x[0] - 2) ** 2, 4 * (2 * x[1] + 4)))
+from .function import Function2 as Function
 
 class test_WolfePowellRuleSearch(unittest.TestCase):
   def test_call(self):
