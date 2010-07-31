@@ -31,10 +31,10 @@ class Optimizer(object):
       self.function = kwargs['function']
     else:
       class Function(object):
-        pass
+        def __call__(self, *args, **kwargs):
+          self.fun(*args, **kwargs)
 
       self.function = Function()
-      self.function.__call__ = kwargs['fun']
       self.function.__dict__.update(kwargs)
 
     self.state['function'] = self.function
@@ -68,7 +68,7 @@ class Optimizer(object):
     Does one iteration of the optimization
     Present here for readability
     """
-    NotImplemented
+    raise RuntimeError("This method should be overrridden")
 
   def check_arguments(self):
     """
