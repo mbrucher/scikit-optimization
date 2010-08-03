@@ -21,7 +21,6 @@ class test_WolfePowellRuleSearch(unittest.TestCase):
     function = Function()
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)
-    assert(state['alpha_step'] > 0)
 
   def test_call_sigma(self):
     lineSearch = WolfePowellRule(sigma = 1)
@@ -29,7 +28,6 @@ class test_WolfePowellRuleSearch(unittest.TestCase):
     function = Function()
     assert_array_less(lineSearch(origin = numpy.zeros((2)), state = state, function = function), numpy.ones((2)) * 0.0001)
     assert(state['alpha_step'] < 0.0001)
-    assert(state['alpha_step'] > 0)
 
   def test_call_nan(self):
     lineSearch = WolfePowellRule(alpha_min = numpy.nan)
