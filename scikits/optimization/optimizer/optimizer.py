@@ -24,7 +24,7 @@ class Optimizer(object):
     # The global state of the optimizer, is passed to every sub module
     self.state = {}
 
-    self.state['iteration'] = 0
+    self.state['iteration'] = -1
     self.optimized = False
 
     if 'function' in kwargs:
@@ -47,6 +47,7 @@ class Optimizer(object):
     Does the optimization, call iterate and returns the optimal set of parameters
     """
     if not self.optimized:
+      self.state['iteration'] = 0
       self.iterate() # needed because we need a do while loop
       self.state['iteration'] += 1
       while(not self.criterion(self.state)):
