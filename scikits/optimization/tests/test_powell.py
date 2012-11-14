@@ -44,5 +44,15 @@ class TestPowell(unittest.TestCase):
     optimi = optimizer.StandardOptimizer(function = Powell(), step = step.NewtonStep(), criterion = criterion.OrComposition(criterion.RelativeValueCriterion(0.00000001), criterion.IterationCriterion(1000)), x0 = startPoint, line_search = line_search.SimpleLineSearch())
     assert_array_almost_equal(optimi.optimize(), numpy.zeros(4, numpy.float), decimal=2)
 
+  def test_simplex(self):
+    startPoint = numpy.empty((5, 4), numpy.float)
+    startPoint[:,0] = 3.
+    startPoint[:,1] = -1.
+    startPoint[:,2] = 0.
+    startPoint[:,3] = 1.
+    startPoint[numpy.arange(4) + 1, numpy.arange(4)] += .1
+    optimi = optimizer.PolytopeOptimizer(function = Powell(), step = step.NewtonStep(), criterion = criterion.OrComposition(criterion.RelativeValueCriterion(0.00000001), criterion.IterationCriterion(1000)), x0 = startPoint, line_search = line_search.SimpleLineSearch())
+    assert_array_almost_equal(optimi.optimize(), numpy.zeros(4, numpy.float), decimal=2)
+
 if __name__ == "__main__":
     NumpyTest().run()

@@ -55,7 +55,7 @@ class Optimizer(object):
 
       self.optimized = True
 
-    return self.optimal_point
+    return self.state['new_parameters']
 
   def record_history(self, **kwargs):
     """
