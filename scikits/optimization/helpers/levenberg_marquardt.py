@@ -11,6 +11,7 @@ class LMQuadratic(quadratic.Quadratic):
     Compute sthe hessian of the fit function
     """
     inter = 2 * self.f.gradient(self.x, params)[..., numpy.newaxis] * self.f.gradient(self.x, params)[..., numpy.newaxis, :]
+    inter = numpy.ascontiguousarray(inter)
     shape = inter.shape[-2], inter.shape[-1]
     inter.shape = (-1, inter.shape[-2] * inter.shape[-1])
     temp = numpy.sum(inter, axis = 0)
