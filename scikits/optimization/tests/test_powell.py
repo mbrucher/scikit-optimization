@@ -54,11 +54,5 @@ class TestPowell(unittest.TestCase):
     optimi = optimizer.PolytopeOptimizer(function = Powell(), criterion = criterion.OrComposition(criterion.RelativeValueCriterion(0.00000001), criterion.IterationCriterion(1000)), x0 = startPoint)
     assert_array_almost_equal(optimi.optimize(), numpy.zeros(4, numpy.float), decimal=2)
 
-  def test_swpr_dfpquasinewton(self):
-    startPoint = numpy.array((3., -1., 0., 1.))
-    optimi = optimizer.StandardOptimizer(function = Powell(), step = step.DFPNewtonStep(numpy.eye(4, 4)), criterion = criterion.criterion(ftol=0.00001, gtol=0.00001, iterations_max=200), x0 = startPoint, line_search = line_search.BacktrackingSearch())
-    opt = optimi.optimize()
-    assert_array_almost_equal(optimi.optimize(), numpy.zeros(4, numpy.float), decimal=2)
-
 if __name__ == "__main__":
     NumpyTest().run()

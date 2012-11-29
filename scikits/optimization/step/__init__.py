@@ -28,6 +28,8 @@ Steps :
     - computes a step based on the Goldfeld Newton modification
   - DFPNewtonStep
     - computes a step based on the Davidson-Fletcher-Powell approximation of the hessian
+  - BFGSNewtonStep
+    - computes a step based on the Broyden-Fletcher-Goldfarb-Shanno approximation of the hessian
 
   - PartialStep
     - decorator for another step but uses only part of this step
@@ -53,6 +55,7 @@ step__all__ = ['GradientStep',
                'CWConjugateGradientStep', 'DYConjugateGradientStep', 'DConjugateGradientStep', 'FRConjugateGradientStep', 'PRPConjugateGradientStep', 'FRPRPConjugateGradientStep',
                'NewtonStep', 'MarquardtStep', 'GoldsteinPriceStep', 'GoldfeldStep',
                'PartialStep',
+               'DFPNewtonStep', 'BFGSNewtonStep',
                'RestartPeriodicallyConjugateGradientStep', 'RestartNotOrthogonalConjugateGradientStep', ]
 
 __all__ = step__all__

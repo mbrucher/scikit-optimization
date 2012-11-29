@@ -86,5 +86,15 @@ class TestQuadratic(unittest.TestCase):
     opt = optimi.optimize()
     assert_almost_equal(optimi.optimize(), numpy.array([1, 3], dtype = numpy.float), decimal = 5)
 
+  def test_swpr_bfgsquasinewton_relative(self):
+    startPoint = numpy.zeros(2, numpy.float)
+    optimi = optimizer.StandardOptimizer(function = Quadratic(), step = step.BFGSNewtonStep(numpy.eye(2)), criterion = criterion.criterion(ftol=0.000001, iterations_max=1000, gtol = 0.0001), x0 = startPoint, line_search = line_search.StrongWolfePowellRule())
+    assert_almost_equal(optimi.optimize(), numpy.array([1, 3], dtype = numpy.float))
+
+  def test_swpr_dfpquasinewton_relative(self):
+    startPoint = numpy.zeros(2, numpy.float)
+    optimi = optimizer.StandardOptimizer(function = Quadratic(), step = step.DFPNewtonStep(numpy.eye(2)), criterion = criterion.criterion(ftol=0.000001, iterations_max=1000, gtol = 0.0001), x0 = startPoint, line_search = line_search.StrongWolfePowellRule())
+    assert_almost_equal(optimi.optimize(), numpy.array([1, 3], dtype = numpy.float))
+
 if __name__ == "__main__":
   NumpyTest().run()
