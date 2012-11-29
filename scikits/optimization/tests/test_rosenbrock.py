@@ -87,7 +87,7 @@ class TestRosenbrock(unittest.TestCase):
     startPoint[0] = -1.01
     startPoint[-1] = 1.01
     optimi = optimizer.StandardOptimizer(function = Rosenbrock(2), step = step.DYConjugateGradientStep(), criterion = criterion.criterion(iterations_max = 1000, ftol = 0.00000001, gtol = 0.0001), x0 = startPoint, line_search = line_search.StrongWolfePowellRule())
-#    assert_array_almost_equal(optimi.optimize(), numpy.ones(2, numpy.float), decimal = 4)
+    assert_array_almost_equal(optimi.optimize(), numpy.ones(2, numpy.float), decimal = 4)
 
 if __name__ == "__main__":
   NumpyTest().run()

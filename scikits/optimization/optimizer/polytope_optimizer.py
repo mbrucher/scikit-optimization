@@ -45,7 +45,7 @@ class PolytopeOptimizer(optimizer.Optimizer):
     """
     point = mean + t * (discarded_point - mean)
     return point, self.function(point)
-    
+
   def iterate(self):
     """
     Implementation of the optimization. Does one iteration
@@ -54,7 +54,7 @@ class PolytopeOptimizer(optimizer.Optimizer):
 
     mean = numpy.mean(self.optimal_point[:-1], axis=0)
     discarded_point = self.optimal_point[-1]
-    
+
     point, value = self.get_value(mean, discarded_point, -1)
     if value < self.state['polytope_values'][-2]:
       if value > self.state['polytope_values'][0]:
