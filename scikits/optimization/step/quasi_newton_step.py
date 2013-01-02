@@ -119,4 +119,47 @@ class SR1NewtonStep(object):
     state['direction'] = step
     return step
 
+class BroydenNewtonStep(object):
+  """
+  The Broyden Quasi-Newton step
+  """
+  def __init__(self, hessian_approx, phi = .5):
+    """
+    Construct a SR1 module
+      - hessian_approx is an approximation of the hessian around the starting point
+      - phi = .5 is the weight between DFQ and BFGS Hessian update
+    """
+    self.B0 = hessian_approx
+    self.phi = phi
 
+  def __call__(self, function, point, state):
+    """
+    Computes a direction step based on a function and a point
+    """
+
+    if 'Bk' not in state:
+      Bk = self.B0.copy()
+      gradient = function.gradient(point)
+      hessian = Bk
+    else:
+      Bk = state['Bk']
+      oldParams = state['old_parameters']
+      newParams = state['new_parameters']
+      gradient = function.gradient(point)
+      oldGradient = state['gradient']
+
+      yk = gradient - oldGradient
+      sk = newParams - oldParams
+      rho = 1 / numpy.dot(yk.T, sk)
+      tk = numpy.dot(Bk, sk)
+      BkBFGS = Bk - numpy.outer(tk, tk) / numpy.dot(sk.T, tk) + numpy.outer(yk, yk) / rho
+      fac1 = numpy.eye(len(gradient)) - rho * numpy.outer(yk, sk)
+      BkDFQ = numpy.dot(fac1,  numpy.dot(Bk, fac1.T)) + rho * numpy.outer(yk, yk)
+      hessian = (1 - self.phi) * BkBFGS + self.phi * BkDFQ
+
+    step = (-numpy.linalg.solve(hessian, gradient)).reshape(point.shape)
+
+    state['Bk'] = Bk
+    state['gradient'] = gradient
+    state['direction'] = step
+    return step
