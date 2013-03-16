@@ -34,10 +34,10 @@ class PolytopeOptimizer(optimizer.Optimizer):
     self.state['polytope_values'] = values[sorted_indices]
     min_index = sorted_indices[0]
     max_index = sorted_indices[-1]
-    self.state['new_parameters'] = self.optimal_point[max_index]
-    self.state['new_value'] = values[max_index]
-    self.state['old_parameters'] = self.optimal_point[min_index]
-    self.state['old_value'] = values[min_index]
+    self.state['old_parameters'] = self.optimal_point[max_index]
+    self.state['old_value'] = values[max_index]
+    self.state['new_parameters'] = self.optimal_point[min_index]
+    self.state['new_value'] = values[min_index]
 
   def get_value(self, mean, discarded_point, t):
     """
