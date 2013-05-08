@@ -10,7 +10,8 @@ class Quadratic(object):
   def __init__(self, x, f):
     """ Initialize the class with coeffs based on values and associated cost """
     f23 = (f[2] - f[1])/(x[2] - x[1])
-    self.coeff = f[0], (f[1] - f[0])/(x[1] - x[0]), (f23 - d[1])/(x[2] - x[0]);
+    d = (f[1] - f[0])/(x[1] - x[0])
+    self.coeff = f[0], d, (f23 - d)/(x[2] - x[0]);
     self.x = x
   
   def __call__(self, x):
@@ -19,11 +20,11 @@ class Quadratic(object):
 
   def find_min(self, a, b):
     """ Finds the minimum value in a given interval """
-    return self.__find(self, a, b, self.coeff)
+    return self.__find(a, b, self.coeff)
 
   def find_max(self, a, b):
     """ Finds the maximum value in a given interval """
-    return self.__find(self, a, b, -self.coeff)
+    return self.__find(a, b, -self.coeff)
 
   def __find(self, a, b, coeff):
     if coeff[2] == 0:
@@ -74,6 +75,7 @@ class MCS(optimizer.Optimizer):
     print self.boxes
     self.state["best_parameters"] = self.optimal_parameters[0]
     self.state["best_value"] = self.optimal_values[0]
+    self.state["boxes"] = self.boxes
     
     self.record_history(**self.state)
 
@@ -101,6 +103,8 @@ class MCS(optimizer.Optimizer):
     
   def initialize_splitting(self, x0):
     """ Create sthe first computation boxes """
+    import math
+
     self.boxes = [(-1, 0, 0, None, (self.bound1, self.bound2))]
     parent = 0
 
@@ -108,9 +112,66 @@ class MCS(optimizer.Optimizer):
 
     for i in range(len(x0)):
       child = 1
-      self.boxes.append((parent, self.boxes[parent][1] + 1, -child, self.function(x0), ()))
+      bound1 = np.array(self.bound1)
+      bound2 = np.array(self.bound1)
+
+      if len(self.optimal_parameters) == 3:
+        v1 = self.bound2[i]
+      else:
+        v1 = self.optimal_parameters[2, i]
+      coordinates = np.sort(self.optimal_parameters[:,i])
+
+      fs = []
+      for value in self.optimal_parameters[:3, i]:
+        x0[i] = value
+        fs.append(self.function(x0))
+      d = Quadratic(self.optimal_parameters[:3, i], fs)
+      xl = d.find_min(self.bound1[i],v1)
+
+      if self.best[i] == 0:
+        if xl < coordinates[0]:
+          newparent = len(self.boxes)
+        else:
+          newparent = len(self.boxes) + 1
+
+      x0[i] = coordinates[0]
+      f0 = self.function(x0)
+      # if the lowest coordinate is not on the boundary, we create a box from the boundary to the coordinate
+      if coordinates[0] != self.bound1[i]:
+        bound2[i] = coordinates[0]
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
+        child += 1
+      # Between two coordinates, create 2 new boxes with differnet level but same parent
+      for j in coordinates[:-1]:
+        bound1[i] = coordinates[j]
+        x0[i] = coordinates[j+1]
+        f1 = self.function(x0)
+        # Split so that the biggest share is given to the box with the lowest f
+        if f0 < f1:
+          bound2[i] = coordinates[j] + 0.5 * (-1 + math.sqrt(5)) * (coordinates[j + 1] - coordinates[j]);
+          s = 1
+        else:
+          bound2[i] = coordinates[j] + 0.5 * (3 - math.sqrt(5)) * (coordinates[j + 1] - coordinates[j]);
+          s = 2
+
+          self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, (np.array(bound1), np.array(bound2))])
+        child += 1
+
+        bound1[i] = bound1[i]
+        bound2[i] = coordinates[j+1]
+        self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, (np.array(bound1), np.array(bound2))])
+        child += 1
+
+        f0 = f1
+      # if the highest coordinate is not on the boundary, we create a box from the coordinate to the boundary
+      if coordinates[-1] != self.bound2[i]:
+        bound1[i] = coordinates[-1]
+        bound2[i] = self.bound2[i]
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
+        child += 1
 
       x0[i] = tempx[i]
+      parent = newparent
 
   def optimize(self):
     return self.state["best_parameters"]
