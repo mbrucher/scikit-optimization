@@ -72,9 +72,10 @@ class MCS(optimizer.Optimizer):
 
     self.optimal_values = [self.function(x) for x in self.optimal_parameters]
     self.initialize_box()
+    print len(self.boxes)
     print self.boxes
-    self.state["best_parameters"] = self.optimal_parameters[0]
-    self.state["best_value"] = self.optimal_values[0]
+    self.state["new_parameters"] = self.optimal_parameters[0]
+    self.state["new_value"] = self.optimal_values[0]
     self.state["boxes"] = self.boxes
     
     self.record_history(**self.state)
@@ -187,9 +188,14 @@ class MCS(optimizer.Optimizer):
       self.boxes[parent][1] = -1
       parent = newparent
 
-  def optimize(self):
-    return self.state["best_parameters"]
-   
+  def iterate(self):
+    #start a new sweep = new iteration
+    self.state["old_value"] = self.state["new_value"]
+    self.state["old_parameters"] = self.state["new_parameters"]
+
+    self.state["new_value"] = self.state["old_value"]
+    self.state["new_parameters"] = self.state["old_parameters"]
+
 class Rosenbrock(object):
   """
   The Rosenbrock function
@@ -204,11 +210,13 @@ class Rosenbrock(object):
     self.count = self.count+1
     return np.sum(100.0 * (x[1:] - x[:-1]**2.0)**2.0 + (1. - x[:-1])**2.0)
 
+# six-hump camel : f(x,y)=x^2*(4-2.1*x^2+x^4/3)+x*y+y^2*(-4+4*y^2)
+
 if __name__ == "__main__":
   from numpy.testing import *
   startPoint = np.array((-1.01, 1.01), np.float)
   u = np.array((-2.0, -2.0), np.float)
   v = np.array((2.0, 2.0), np.float)
 
-  optimi = MCS(function=Rosenbrock(), criterion=criterion.OrComposition(criterion.MonotonyCriterion(0.00001), criterion.IterationCriterion(10000)), x0=startPoint, u=u, v=v)
+  optimi = MCS(function=Rosenbrock(), criterion=criterion.criterion(iterations_max = 1000, ftol = 0.00001), x0=startPoint, u=u, v=v)
   assert_almost_equal(optimi.optimize(), np.ones(2, np.float), decimal=1)
