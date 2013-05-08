@@ -5,6 +5,45 @@ import numpy as np
 from scikits.optimization import *
 from scikits.optimization.optimizer import optimizer
 
+class Quadratic(object):
+  """ A MCS specific quadratif function """
+  def __init__(self, x, f):
+    """ Initialize the class with coeffs based on values and associated cost """
+    f23 = (f[2] - f[1])/(x[2] - x[1])
+    self.coeff = f[0], (f[1] - f[0])/(x[1] - x[0]), (f23 - d[1])/(x[2] - x[0]);
+    self.x = x
+  
+  def __call__(self, x):
+    """ Computes the quadratic function at a given point """
+    return self.coeff[0] + self.coeff[1] * (x - self.x[0]) + self.coeff[2] * (x - self.x[0]) * (x - self.x[1]);
+
+  def find_min(self, a, b):
+    """ Finds the minimum value in a given interval """
+    return self.__find(self, a, b, self.coeff)
+
+  def find_max(self, a, b):
+    """ Finds the maximum value in a given interval """
+    return self.__find(self, a, b, -self.coeff)
+
+  def __find(self, a, b, coeff):
+    if coeff[2] == 0:
+      if coeff[1] > 0:
+        return a
+      else:
+        return b
+    elif coeff[2] > 0:
+      tmp = 0.5 * (self.x[0] + self.x[1]) - 0.5 * coeff[1] / coeff[2];
+      if a <= tmp <= b:
+        return tmp
+      elif self(a) < self(b):
+        return a
+      else:
+        return b
+    elif  self(a) < self(b):
+      return a
+    else:
+      return b
+
 class MCS(optimizer.Optimizer):
   """ A Multilevel Coordinate Search """
   def __init__(self, **kwargs):
