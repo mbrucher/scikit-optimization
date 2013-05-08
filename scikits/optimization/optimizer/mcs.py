@@ -62,19 +62,18 @@ class MCS(optimizer.Optimizer):
     self.bound2 = kwargs['v']
     if 'x0' not in kwargs:
       if 'x' in kwargs:
-        self.optimal_parameters = list(kwargs['x'])
+        self.optimal_parameters = np.array(kwargs['x'])
       else:
-        self.optimal_parameters = [(self.bound1 + self.bound2) / 2, self.bound1, self.bound2]
+        self.optimal_parameters = np.array([(self.bound1 + self.bound2) / 2, self.bound1, self.bound2])
     else:
-      self.optimal_parameters = [kwargs['x0'], self.bound1, self.bound2]
+      self.optimal_parameters = np.array([kwargs['x0'], self.bound1, self.bound2])
     self.smax = kwargs.get('smax', 50*len(self.bound1))
 
     self.optimal_values = [self.function(x) for x in self.optimal_parameters]
     self.initialize_box()
-    print self.optimal_values
-    best = np.argmin(self.optimal_values)
-    self.state["best_parameters"] = self.optimal_parameters[best]
-    self.state["best_value"] = self.optimal_values[best]
+    print self.boxes
+    self.state["best_parameters"] = self.optimal_parameters[0]
+    self.state["best_value"] = self.optimal_values[0]
     
     self.record_history(**self.state)
 
@@ -84,30 +83,34 @@ class MCS(optimizer.Optimizer):
     self.initialize_splitting(x0)
     
   def initialize_x(self):
-    """ After starting with a given x0, the method adds also to the mix new other points based on the initial distribution.
-        In all dimensions, several xil will be tested and stored to be seeds for the split boxes """
+    """ After starting with a given x0, the method adds also to the mix new other points based on the initial distribution. """
     x0 = np.array(self.optimal_parameters[0])
     f0 = self.optimal_values[0]
 
-    self.fli = np.zeros((len(x0), len(self.optimal_parameters)))
-    self.fli[0,0] = f0
+    self.best = np.zeros(len(x0), dtype=np.int)
 
     for i in range(len(x0)):
-      best = 0
-      if i != 0:
-        self.fli[i,0] = self.fli[i-1,0]
       for j in range(1, len(self.optimal_parameters)):
         x0[i] = self.optimal_parameters[j][i]
-        self.fli[i,j] = self.function(x0)
-        if self.fli[i,j] < f0:
-          best = j
-          f0 = self.fli[i,j]
-      x0[i] = self.optimal_parameters[best][i]
+        f1 = self.function(x0)
+        if f1 < f0:
+          self.best[i] = j
+          f0 = f1
+      x0[i] = self.optimal_parameters[self.best[i]][i]
     return x0, f0
     
   def initialize_splitting(self, x0):
     """ Create sthe first computation boxes """
-    self.boxes = []
+    self.boxes = [(-1, 0, 0, None, (self.bound1, self.bound2))]
+    parent = 0
+
+    tempx = np.array(x0)
+
+    for i in range(len(x0)):
+      child = 1
+      self.boxes.append((parent, self.boxes[parent][1] + 1, -child, self.function(x0), ()))
+
+      x0[i] = tempx[i]
 
   def optimize(self):
     return self.state["best_parameters"]
