@@ -111,8 +111,8 @@ class MCS(optimizer.Optimizer):
 
     for i in range(len(x0)):
       child = 1
-      bound1 = np.array(self.bound1)
-      bound2 = np.array(self.bound1)
+      bound1 = np.array(self.boxes[parent][-1][0])
+      bound2 = np.array(self.boxes[parent][-1][1])
 
       coordinates = self.optimal_parameters[:,i]
       sortorder = np.argsort(coordinates)
@@ -169,7 +169,7 @@ class MCS(optimizer.Optimizer):
           d = Quadratic(coordinates[sortorder[j:j+3]], fs)
           xl = d.find_min(coordinates[sortorder[j]], coordinates[sortorder[j+2]])
 
-        bound1[i] = bound1[i]
+        bound1[i] = bound2[i]
         bound2[i] = coordinates[sortorder[j+1]]
         self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, (np.array(bound1), np.array(bound2))])
         child += 1
@@ -192,7 +192,7 @@ class MCS(optimizer.Optimizer):
     self.state["old_parameters"] = self.state["new_parameters"]
 
     records, minlevel = self.__find_ranks()
-
+    print records
     # find best box for each level
 
     # for each new level
@@ -208,6 +208,7 @@ class MCS(optimizer.Optimizer):
     records = np.zeros(self.smax, dtype=np.int) - 1
     level = -1
     for i in range(len(self.boxes)):
+      print self.boxes[i]
       if self.boxes[i][1] >=0:
         current_level = self.boxes[i][1]
         level = max(current_level, level)
