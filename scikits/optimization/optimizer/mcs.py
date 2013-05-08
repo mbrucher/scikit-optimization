@@ -71,21 +71,19 @@ class MCS(optimizer.Optimizer):
     self.smax = kwargs.get('smax', 50*len(self.bound1))
 
     self.optimal_values = [self.function(x) for x in self.optimal_parameters]
-    self.initialize_box()
-    print len(self.boxes)
-    print self.boxes
+    self.__initialize_box()
     self.state["new_parameters"] = self.optimal_parameters[0]
     self.state["new_value"] = self.optimal_values[0]
     self.state["boxes"] = self.boxes
     
     self.record_history(**self.state)
 
-  def initialize_box(self):
+  def __initialize_box(self):
     """ This methods first computes all the interesting points passed as parameters and then creates the first boxes for the algorithm """
-    x0, f0 = self.initialize_x()
-    self.initialize_splitting(x0)
+    x0, f0 = self.__initialize_x()
+    self.__initialize_splitting(x0)
     
-  def initialize_x(self):
+  def __initialize_x(self):
     """ After starting with a given x0, the method adds also to the mix new other points based on the initial distribution. """
     x0 = np.array(self.optimal_parameters[0])
     f0 = self.optimal_values[0]
@@ -102,7 +100,7 @@ class MCS(optimizer.Optimizer):
       x0[i] = self.optimal_parameters[self.best[i]][i]
     return x0, f0
     
-  def initialize_splitting(self, x0):
+  def __initialize_splitting(self, x0):
     """ Create sthe first computation boxes """
     import math
 
@@ -193,9 +191,31 @@ class MCS(optimizer.Optimizer):
     self.state["old_value"] = self.state["new_value"]
     self.state["old_parameters"] = self.state["new_parameters"]
 
+    records, minlevel = self.__find_ranks()
+
+    # find best box for each level
+
+    # for each new level
+    #  get the best box for the level    
+    #  determine how to split it
+    
+    #  split it properly
+    
     self.state["new_value"] = self.state["old_value"]
     self.state["new_parameters"] = self.state["old_parameters"]
 
+  def __find_ranks(self):
+    records = np.zeros(self.smax, dtype=np.int) - 1
+    level = -1
+    for i in range(len(self.boxes)):
+      if self.boxes[i][1] >=0:
+        current_level = self.boxes[i][1]
+        level = max(current_level, level)
+        if records[current_level] == -1 or self.boxes[records[current_level]][3] < self.boxes[i][3]:
+          records[current_level] = i
+
+    return records, level
+    
 class Rosenbrock(object):
   """
   The Rosenbrock function
