@@ -105,7 +105,7 @@ class MCS(optimizer.Optimizer):
     """ Create sthe first computation boxes """
     import math
 
-    self.boxes = [(-1, 0, 0, None, (self.bound1, self.bound2))]
+    self.boxes = [[-1, 0, 0, None, (self.bound1, self.bound2)]]
     parent = 0
 
     tempx = np.array(x0)
@@ -115,62 +115,76 @@ class MCS(optimizer.Optimizer):
       bound1 = np.array(self.bound1)
       bound2 = np.array(self.bound1)
 
-      if len(self.optimal_parameters) == 3:
-        v1 = self.bound2[i]
-      else:
-        v1 = self.optimal_parameters[2, i]
-      coordinates = np.sort(self.optimal_parameters[:,i])
+      coordinates = self.optimal_parameters[:,i]
+      sortorder = np.argsort(coordinates)
 
+      # Try to find the minimum box so that it can be split in next dimension
       fs = []
-      for value in self.optimal_parameters[:3, i]:
-        x0[i] = value
+      for index in sortorder[:3]:
+        x0[i] = coordinates[index]
         fs.append(self.function(x0))
-      d = Quadratic(self.optimal_parameters[:3, i], fs)
-      xl = d.find_min(self.bound1[i],v1)
+      d = Quadratic(coordinates[sortorder[:3]], fs)
+      xl = d.find_min(coordinates[sortorder[0]], coordinates[sortorder[2]])
 
-      if self.best[i] == 0:
-        if xl < coordinates[0]:
+      if self.best[i] == sortorder[0]:
+        if xl < coordinates[sortorder[0]]:
           newparent = len(self.boxes)
         else:
           newparent = len(self.boxes) + 1
 
-      x0[i] = coordinates[0]
+      x0[i] = coordinates[sortorder[0]]
       f0 = self.function(x0)
       # if the lowest coordinate is not on the boundary, we create a box from the boundary to the coordinate
-      if coordinates[0] != self.bound1[i]:
-        bound2[i] = coordinates[0]
+      if coordinates[sortorder[0]] != self.bound1[i]:
+        bound2[i] = coordinates[sortorder[0]]
         self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
         child += 1
       # Between two coordinates, create 2 new boxes with differnet level but same parent
-      for j in coordinates[:-1]:
-        bound1[i] = coordinates[j]
-        x0[i] = coordinates[j+1]
+      for j in range(len(coordinates) - 1):
+        bound1[i] = coordinates[sortorder[j]]
+        x0[i] = coordinates[sortorder[j+1]]
         f1 = self.function(x0)
         # Split so that the biggest share is given to the box with the lowest f
         if f0 < f1:
-          bound2[i] = coordinates[j] + 0.5 * (-1 + math.sqrt(5)) * (coordinates[j + 1] - coordinates[j]);
+          bound2[i] = coordinates[sortorder[j]] + 0.5 * (-1 + math.sqrt(5)) * (coordinates[sortorder[j+1]] - coordinates[sortorder[j]]);
           s = 1
         else:
-          bound2[i] = coordinates[j] + 0.5 * (3 - math.sqrt(5)) * (coordinates[j + 1] - coordinates[j]);
+          bound2[i] = coordinates[sortorder[j]] + 0.5 * (3 - math.sqrt(5)) * (coordinates[sortorder[j+1]] - coordinates[sortorder[j]]);
           s = 2
 
-          self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, (np.array(bound1), np.array(bound2))])
         child += 1
 
+        # Try to find the minimum box so that it can be split in next dimension, follow up if the best was not 0
+        if j and self.best[i] == sortorder[j]:
+          if xl < coordinates[sortorder[j]]:
+            newparent = len(self.boxes) - 1
+          else:
+            newparent = len(self.boxes)
+
+        if 1 < j < len(coordinates) - 2:
+          fs = []
+          for index in sortorder[j:j+3]:
+            x0[i] = coordinates[index]
+            fs.append(self.function(x0))
+          d = Quadratic(coordinates[sortorder[j:j+3]], fs)
+          xl = d.find_min(coordinates[sortorder[j]], coordinates[sortorder[j+2]])
+
         bound1[i] = bound1[i]
-        bound2[i] = coordinates[j+1]
+        bound2[i] = coordinates[sortorder[j+1]]
         self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, (np.array(bound1), np.array(bound2))])
         child += 1
 
         f0 = f1
       # if the highest coordinate is not on the boundary, we create a box from the coordinate to the boundary
-      if coordinates[-1] != self.bound2[i]:
-        bound1[i] = coordinates[-1]
+      if coordinates[sortorder[-1]] != self.bound2[i]:
+        bound1[i] = coordinates[sortorder[-1]]
         bound2[i] = self.bound2[i]
         self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
         child += 1
 
       x0[i] = tempx[i]
+      self.boxes[parent][1] = -1
       parent = newparent
 
   def optimize(self):
