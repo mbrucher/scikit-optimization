@@ -81,26 +81,34 @@ class MCS(optimizer.Optimizer):
   def initialize_box(self):
     """ This methods first computes all the interesting points passed as parameters and then creates the first boxes for the algorithm """
     x0, f0 = self.initialize_x()
-    self.optimal_parameters.append(x0)
-    self.optimal_values.append(f0)
-    #self.initialize_splitting()
+    self.initialize_splitting(x0)
     
   def initialize_x(self):
-    """ after starting with a given x, the method adds also to the mix new other points based on the initial distribution """
+    """ After starting with a given x0, the method adds also to the mix new other points based on the initial distribution.
+        In all dimensions, several xil will be tested and stored to be seeds for the split boxes """
     x0 = np.array(self.optimal_parameters[0])
     f0 = self.optimal_values[0]
 
+    self.fli = np.zeros((len(x0), len(self.optimal_parameters)))
+    self.fli[0,0] = f0
+
     for i in range(len(x0)):
       best = 0
+      if i != 0:
+        self.fli[i,0] = self.fli[i-1,0]
       for j in range(1, len(self.optimal_parameters)):
         x0[i] = self.optimal_parameters[j][i]
-        f1 = self.function(x0)
-        if f1 < f0:
+        self.fli[i,j] = self.function(x0)
+        if self.fli[i,j] < f0:
           best = j
-          f1 = f0
+          f0 = self.fli[i,j]
       x0[i] = self.optimal_parameters[best][i]
-    return x0, f1
+    return x0, f0
     
+  def initialize_splitting(self, x0):
+    """ Create sthe first computation boxes """
+    self.boxes = []
+
   def optimize(self):
     return self.state["best_parameters"]
    
