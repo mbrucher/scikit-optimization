@@ -78,8 +78,8 @@ class MCS(optimizer.Optimizer):
   def __initialize_box(self):
     """ This methods first computes all the interesting points passed as parameters and then creates the first boxes for the algorithm """
     x0, f0 = self.__initialize_x()
-    self.state["new_parameters"] = f0
-    self.state["new_value"] = x0
+    self.state["new_parameters"] = x0
+    self.state["new_value"] = f0
     self.__initialize_splitting(x0)
     
   def __initialize_x(self):
