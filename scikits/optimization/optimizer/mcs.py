@@ -136,10 +136,11 @@ class MCS(optimizer.Optimizer):
       # if the lowest coordinate is not on the boundary, we create a box from the boundary to the coordinate
       if coordinates[sortorder[0]] != self.bound1[i]:
         bound2[i] = coordinates[sortorder[0]]
-        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2), np.array(x0))])
         child += 1
       # Between two coordinates, create 2 new boxes with differnet level but same parent
       for j in range(len(coordinates) - 1):
+        oldx0 = np.array(x0)
         bound1[i] = coordinates[sortorder[j]]
         x0[i] = coordinates[sortorder[j+1]]
         f1 = self.function(x0)
@@ -151,9 +152,10 @@ class MCS(optimizer.Optimizer):
           bound2[i] = coordinates[sortorder[j]] + 0.5 * (3 - math.sqrt(5)) * (coordinates[sortorder[j+1]] - coordinates[sortorder[j]]);
           s = 2
 
-        self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, None, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, None, (np.array(bound1), np.array(bound2), oldx0)])
         child += 1
 
+        oldx0 = np.array(x0)
         # Try to find the minimum box so that it can be split in next dimension, follow up if the best was not 0
         if j and self.best[i] == sortorder[j]:
           if xl < coordinates[sortorder[j]]:
@@ -171,7 +173,7 @@ class MCS(optimizer.Optimizer):
 
         bound1[i] = bound2[i]
         bound2[i] = coordinates[sortorder[j+1]]
-        self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, None, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, None, (np.array(bound1), np.array(bound2), oldx0)])
         child += 1
 
         f0 = f1
@@ -179,7 +181,7 @@ class MCS(optimizer.Optimizer):
       if coordinates[sortorder[-1]] != self.bound2[i]:
         bound1[i] = coordinates[sortorder[-1]]
         bound2[i] = self.bound2[i]
-        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2), oldx0)])
         child += 1
 
       x0[i] = tempx[i]
@@ -193,35 +195,76 @@ class MCS(optimizer.Optimizer):
     self.state["old_parameters"] = self.state["new_parameters"]
 
     records, minlevel = self.__find_ranks()
+
+    print "Starting sweep"
     while minlevel < self.smax:
+      splits, x, y = self.__get_box_info(self.boxes[records[minlevel]])
+
+      print "level", minlevel
       print self.boxes[records[minlevel]]
-    #  determine how to split it
-    
-    #  split it properly
+      print splits, x, y
+
+      split = 0
+      if minlevel > 2 * len(splits) * (np.min(splits) + 1):
+        split = 1 # split by rank
+
+      # Determine how to split it
+      #  split by rank?
+      #  split by gain?
+
+      if split == 0:
+        self.boxes[records[minlevel]][1] += 1
+        if records[minlevel+1] == -1:
+          records[minlevel+1] = records[minlevel]
+        elif self.boxes[records[minlevel]][3] < self.boxes[records[minlevel+1]][3]:
+          records[minlevel+1] = records[minlevel]
+      elif split == 1: # split by rank
+        pass
+      # split it properly
 
       minlevel += 1
       while minlevel < self.smax:
         if records[minlevel] == -1:
           minlevel += 1
         else:
-          break   
-    
+          break
+
     self.state["new_value"] = self.state["old_value"]
     self.state["new_parameters"] = self.state["old_parameters"]
 
   def __find_ranks(self):
     records = np.zeros(self.smax, dtype=np.int) - 1
-    level = -1
+    level = self.smax
     for i in range(len(self.boxes)):
       print self.boxes[i]
       if self.boxes[i][1] >= 0:
         current_level = self.boxes[i][1]
-        level = max(current_level, level)
+        level = min(current_level, level)
         if records[current_level] == -1 or self.boxes[records[current_level]][3] > self.boxes[i][3]:
           records[current_level] = i
 
     return records, level
-    
+
+  def __get_box_info(self, box):
+    """ Determines mandatory box information as split and vertex positions x and the furthest y """
+    x = np.array(box[-1][-1])
+    y = np.array(box[-1][-1])
+    splits = np.zeros(len(x), dtype=np.int)
+
+    boxtraversal = box
+
+    while boxtraversal[0] != -1:
+      boxtraversal = self.boxes[boxtraversal[0]]
+      splits[boxtraversal[4]] += 1
+
+    for i in range(len(x)):
+      if x[i] - box[-1][0][i] > box[-1][1][i] - x[i]:
+        y[i] = box[-1][0][i]
+      else:
+        y[i] = box[-1][1][i]
+
+    return splits, x, y
+
 class Rosenbrock(object):
   """
   The Rosenbrock function
