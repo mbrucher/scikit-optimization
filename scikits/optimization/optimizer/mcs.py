@@ -103,8 +103,8 @@ class MCS(optimizer.Optimizer):
   def __initialize_splitting(self, x0):
     """ Create sthe first computation boxes """
     import math
-
-    self.boxes = [[-1, 0, 0, None, (self.bound1, self.bound2)]]
+    # a box is parent, level, child, cost, split, boundaries
+    self.boxes = [[-1, 0, 0, None, None, (self.bound1, self.bound2)]]
     parent = 0
 
     tempx = np.array(x0)
@@ -136,7 +136,7 @@ class MCS(optimizer.Optimizer):
       # if the lowest coordinate is not on the boundary, we create a box from the boundary to the coordinate
       if coordinates[sortorder[0]] != self.bound1[i]:
         bound2[i] = coordinates[sortorder[0]]
-        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2))])
         child += 1
       # Between two coordinates, create 2 new boxes with differnet level but same parent
       for j in range(len(coordinates) - 1):
@@ -151,7 +151,7 @@ class MCS(optimizer.Optimizer):
           bound2[i] = coordinates[sortorder[j]] + 0.5 * (3 - math.sqrt(5)) * (coordinates[sortorder[j+1]] - coordinates[sortorder[j]]);
           s = 2
 
-        self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + s, -child, f0, None, (np.array(bound1), np.array(bound2))])
         child += 1
 
         # Try to find the minimum box so that it can be split in next dimension, follow up if the best was not 0
@@ -171,7 +171,7 @@ class MCS(optimizer.Optimizer):
 
         bound1[i] = bound2[i]
         bound2[i] = coordinates[sortorder[j+1]]
-        self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 3 - s, -child, f1, None, (np.array(bound1), np.array(bound2))])
         child += 1
 
         f0 = f1
@@ -179,11 +179,12 @@ class MCS(optimizer.Optimizer):
       if coordinates[sortorder[-1]] != self.bound2[i]:
         bound1[i] = coordinates[sortorder[-1]]
         bound2[i] = self.bound2[i]
-        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, (np.array(bound1), np.array(bound2))])
+        self.boxes.append([parent, self.boxes[parent][1] + 1, -child, f0, None, (np.array(bound1), np.array(bound2))])
         child += 1
 
       x0[i] = tempx[i]
       self.boxes[parent][1] = -1
+      self.boxes[parent][4] = -i
       parent = newparent
 
   def iterate(self):
@@ -192,14 +193,18 @@ class MCS(optimizer.Optimizer):
     self.state["old_parameters"] = self.state["new_parameters"]
 
     records, minlevel = self.__find_ranks()
-    print records
-    # find best box for each level
-
-    # for each new level
-    #  get the best box for the level    
+    while minlevel < self.smax:
+      print self.boxes[records[minlevel]]
     #  determine how to split it
     
     #  split it properly
+
+      minlevel += 1
+      while minlevel < self.smax:
+        if records[minlevel] == -1:
+          minlevel += 1
+        else:
+          break   
     
     self.state["new_value"] = self.state["old_value"]
     self.state["new_parameters"] = self.state["old_parameters"]
@@ -209,10 +214,10 @@ class MCS(optimizer.Optimizer):
     level = -1
     for i in range(len(self.boxes)):
       print self.boxes[i]
-      if self.boxes[i][1] >=0:
+      if self.boxes[i][1] >= 0:
         current_level = self.boxes[i][1]
         level = max(current_level, level)
-        if records[current_level] == -1 or self.boxes[records[current_level]][3] < self.boxes[i][3]:
+        if records[current_level] == -1 or self.boxes[records[current_level]][3] > self.boxes[i][3]:
           records[current_level] = i
 
     return records, level
