@@ -45,6 +45,18 @@ class Quadratic(object):
     else:
       return b
 
+def subint(x, y):
+  """ Specific fucntion to find a range not too small or too large """
+  x2 = y
+  if 1000 * math.abs(x) < 1:
+   if math.abs(y) > 1000:
+     x2 = math.sign(y)
+   if math.abs(y) > 1000 * math.abs(x):
+     x2 = 10 * math.sign(y) * math.abs(x)
+
+  x1 = x + (x2 - x) / 10
+  return x1, x2
+
 class MCS(optimizer.Optimizer):
   """ A Multilevel Coordinate Search """
   def __init__(self, **kwargs):
@@ -187,29 +199,35 @@ class MCS(optimizer.Optimizer):
 
     print "Starting sweep"
     while minlevel < self.smax:
-      splits, x, y = self.__get_box_info(self.boxes[records[minlevel]])
+      current_box = self.boxes[records[minlevel]]
+      splits, x, y = self.__get_box_info(current_box)
 
       print "level", minlevel
-      print self.boxes[records[minlevel]]
+      print current_box
       print splits, x, y
 
       split = 0
       if minlevel > 2 * len(splits) * (np.min(splits) + 1):
         split = 1 # split by rank
-
-      # Determine how to split it
-      #  split by rank?
-      #  split by gain?
+        current_box[4] = np.argmin(splits)
+      elif not current_box[2]:
+        expected_gain, dimension = self.__expected_gain(current_box, splits, x, y)
+        if current_box[3] + expected_gain < self.state["old_value"]:
+          split = 2 # split by gain
+        else:
+          split = 0
+          current_box[2] = True
 
       if split == 0:
-        self.boxes[records[minlevel]][1] += 1
+        current_box[1] += 1
         if records[minlevel+1] == -1:
           records[minlevel+1] = records[minlevel]
-        elif self.boxes[records[minlevel]][3] < self.boxes[records[minlevel+1]][3]:
+        elif current_box[3] < self.boxes[records[minlevel+1]][3]:
           records[minlevel+1] = records[minlevel]
       elif split == 1: # split by rank
         pass
-      # split it properly
+      elif split == 2: # split by gain
+        pass
 
       minlevel += 1
       while minlevel < self.smax:
@@ -253,6 +271,20 @@ class MCS(optimizer.Optimizer):
         y[i] = box[-1][1][i]
 
     return splits, x, y
+
+  def __expected_gain(self, current_box, splits, x, y):
+    """ Try to find the best gain for a split """
+    dimension = -1
+    expected = np.inf
+    for i in range(len(splits)):
+      if splits[i]:
+        pass # already split
+      else:  # never split, use initialization list
+        possible_gain = np.min(self.best_values[i]) - self.best_values[i, self.best[i]]
+        if possible_gain < expected:
+          expected = possible_gain
+          dimension = i
+    return expected, dimension
 
 class Rosenbrock(object):
   """
