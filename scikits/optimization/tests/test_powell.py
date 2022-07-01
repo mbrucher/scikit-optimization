@@ -17,19 +17,25 @@ class Powell:
     """
     Get the value of the Powell function at a specific point
     """
-    return (x[0] + 10* x[1])**2 + 5 * (x[2] - x[3])**2 + (x[1] - 2 * x[2])**4 + 10 * (x[0] - x[3])**4
+    return (x[0] + 10 * x[1])**2 + 5 * (x[2] - x[3])**2 + (x[1] - 2 * x[2])**4 + 10 * (x[0] - x[3])**4
 
   def gradient(self, x):
     """
     Evaluates the gradient of the function
     """
-    return numpy.array([2 * (x[0] + 10 * x[1]) + 40 * (x[0] - x[3])**3, 20 * (x[0] + 10 * x[1]) + 4 * (x[1] - x[2])**3, 10 * (x[2] - x[3]) - 8 * (x[1] - 2 * x[2])**3, 10 * (x[2] - x[3]) - 40 * (x[0] - x[3])**3], dtype = numpy.float)
+    return numpy.array([2 * (x[0] + 10 * x[1]) + 40 * (x[0] - x[3])**3,
+                        20 * (x[0] + 10 * x[1]) + 4 * (x[1] - 2 * x[2])**3,
+                        10 * (x[2] - x[3]) - 8 * (x[1] - 2 * x[2])**3,
+                        -10 * (x[2] - x[3]) - 40 * (x[0] - x[3])**3], dtype = numpy.float)
 
   def hessian(self, x):
     """
     Evaluates the gradient of the function
     """
-    return numpy.array([[2 + 120 * (x[0] - x[3]) ** 2, 20, 0, -120 * (x[0] - x[3]) ** 2], [20, 200 + 12 * (x[1] - 2 * x[2]) ** 2, -24 * (x[1] - 2 * x[2]) ** 2, 0], [0, -24 * (x[1] - 2 * x[2]) ** 2, 10 + 48 * (x[1] - 2 * x[2]) ** 2, -10], [-120 * (x[0] - x[3]) ** 2, 0, -10, -10 + 120 * (x[0] - x[3])**2]], dtype = numpy.float)
+    return numpy.array([[2 + 120 * (x[0] - x[3])**2, 20, 0, -120 * (x[0] - x[3])**2],
+                        [20, 200 + 12 * (x[1] - 2 * x[2])**2, -24 * (x[1] - 2 * x[2])**2, 0],
+                        [0, -24 * (x[1] - 2 * x[2])**2, 10 + 48 * (x[1] - 2 * x[2])**2, -10],
+                        [-120 * (x[0] - x[3]) ** 2, 0, -10, 10 + 120 * (x[0] - x[3])**2]], dtype = numpy.float)
 
 class TestPowell(unittest.TestCase):
   """
